@@ -3,8 +3,8 @@ import express, { Express, Request, Response } from "express";
 const app: Express = express();
 const port: number = 3000;
 
-app.get("/", (req: Request, res: Response) => {
-    res.send("Trang chủ");
+app.get("/tours", (req: Request, res: Response) => {
+    res.send("Danh sách tour");
 });
 
 app.listen(port, () => {
