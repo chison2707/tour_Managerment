@@ -13,6 +13,7 @@ export const index = async (req: Request, res: Response) => {
     });
 
     res.render("client/pages/tours/index", {
+        pageTitle: "Danh sách tours",
         tours: tours
     });
 }

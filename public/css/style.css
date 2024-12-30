@@ -1,0 +1,33 @@
+/* Đảm bảo toàn bộ trang sử dụng Flexbox để đẩy footer xuống */
+html,
+body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 85%;
+}
+
+main {
+    flex: 1;
+}
+
+/* end footer */
+
+/* box-head */
+.box-head {
+    margin-bottom: 30px;
+}
+
+.box-head .inner-title {
+    margin-bottom: 0;
+    font-size: 28px;
+    font-weight: 600;
+    color: green;
+}
+
+/* End box-head */
