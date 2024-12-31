@@ -5,15 +5,6 @@ import { QueryTypes } from "sequelize";
 
 // [GET]/tours/:slugCategory
 export const index = async (req: Request, res: Response) => {
-    // // select * from tour where deleted = false and status = 'active'
-    // const tours = await Tour.findAll({
-    //     where: {
-    //         deleted: false,
-    //         status: 'active'
-    //     },
-    //     raw: true
-    // });
-
     const slugCategory = req.params.slugCategory
     const tours = await sequelize.query(`
         SELECT tours.*, ROUND(price * (1 - discount/100),0) AS price_special
@@ -43,5 +34,13 @@ export const index = async (req: Request, res: Response) => {
     res.render("client/pages/tours/index", {
         pageTitle: "Danh sách tours",
         tours: tours
+    });
+}
+
+// [GET]/tours/detail/:slugTour
+export const detail = async (req: Request, res: Response) => {
+    const slugTour = req.params.slugTour;
+    res.render("client/pages/tours/detail", {
+        pageTitle: "Chi tiết tour"
     });
 }
