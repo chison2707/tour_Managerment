@@ -7,16 +7,21 @@ block main
     .container.my-3
       .row
         .col-6
-            if(tourDetail.images)
-                .inner-images
-                    .swiper.swiper-images-main
-                        .swiper-wrapper
-                            each image in tourDetail.images
-                                .swiper-slide
-                                    .inner-image
-                                        img(src=image)
-                        .swiper-button-prev
-                        .swiper-button-next
+          .inner-images
+            .swiper.mySwiper2(style='--swiper-navigation-color: #fff; --swiper-pagination-color: #fff')
+              .swiper-wrapper
+                each image in tourDetail.images
+                  .swiper-slide
+                    .inner-image
+                      img(src=image)
+              .swiper-button-next
+              .swiper-button-prev
+            .swiper.mySwiper(thumbsslider='')
+              .swiper-wrapper
+                each image in tourDetail.images
+                  .swiper-slide
+                    .inner-image
+                      img(src=image)
         
         .col-6
           .inner-title #{tourDetail.title}
