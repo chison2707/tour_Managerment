@@ -16,6 +16,19 @@ var swiper2 = new Swiper(".mySwiper2", {
 });
 // End swiper-images-main
 
+// alert success
+const alertAddCartSusscess = () => {
+    const elementAlert = document.querySelector("[alert-add-cart-susscess]");
+    if (elementAlert) {
+        elementAlert.classList.remove("alert-hidden");
+
+        setTimeout(() => {
+            elementAlert.classList.add("alert-hidden");
+        }, 3000);
+    }
+}
+//end  alert success
+
 // cart
 const cart = localStorage.getItem("cart");
 if (!cart) {
@@ -44,6 +57,8 @@ if (formAddToCart) {
 
 
             localStorage.setItem("cart", JSON.stringify(cart));
+
+            alertAddCartSusscess();
         }
     })
 }
