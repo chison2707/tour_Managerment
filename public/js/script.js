@@ -35,6 +35,18 @@ if (!cart) {
     localStorage.setItem("cart", JSON.stringify([]));
 }
 
+// hiển thị số lượng tour trong giỏ hàng
+const showMiniCart = () => {
+    const miniCart = document.querySelector("[mini-cart]");
+
+    if (miniCart) {
+        const cart = JSON.parse(localStorage.getItem("cart"));
+        const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+        miniCart.innerHTML = totalQuantity;
+    }
+}
+showMiniCart();
+
 // thêm tour vào giỏ hàng
 const formAddToCart = document.querySelector("[form-add-to-cart]");
 if (formAddToCart) {
@@ -59,8 +71,8 @@ if (formAddToCart) {
             localStorage.setItem("cart", JSON.stringify(cart));
 
             alertAddCartSusscess();
+            showMiniCart();
         }
     })
 }
-
 // end cart
