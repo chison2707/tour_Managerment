@@ -61,7 +61,6 @@ const updateQuantityInCart = () => {
             const tourId = input.getAttribute("item-id");
             const quantity = parseInt(input.value);
 
-            console.log(tourId, quantity);
             const cart = JSON.parse(localStorage.getItem("cart"));
             const tourUpdate = cart.find(item => item.tourId == tourId);
             tourUpdate.quantity = quantity;
@@ -76,3 +75,40 @@ const updateQuantityInCart = () => {
 // lấy data in ra giao diện
 drawListTour();
 // end lấy data in ra giao diện
+
+// Đặt tour
+const formOrder = document.querySelector("[form-order]");
+if (formOrder) {
+    formOrder.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const fullName = e.target.elements.fullName.value;
+        const phone = e.target.elements.phone.value;
+        const note = e.target.elements.note.value;
+
+        const cart = JSON.parse(localStorage.getItem("cart"));
+
+        const data = {
+            info: {
+                fullName,
+                phone,
+                note
+            },
+            cart: cart
+        };
+
+        fetch("/order", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data),
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+            })
+    });
+}
+
+// Hết đặt tour
