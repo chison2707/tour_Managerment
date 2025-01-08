@@ -10,8 +10,6 @@ const adminRoutes = (app: Express): void => {
     app.use(`${PATH_ADMIN}/categories`, categoryRoutes);
     app.use(`${PATH_ADMIN}/tours`, tourRoutes);
 
-
-
 };
 
 export default adminRoutes;

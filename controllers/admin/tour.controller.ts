@@ -1,8 +1,10 @@
 import { Request, Response } from "express-serve-static-core";
 import Tour from "../../models/tour.model";
+import Category from "../../models/category.model";
+import { generateTourCode } from "../../helpers/generate";
 
+// [GET]/admin/tours
 export const index = async (req: Request, res: Response) => {
-
     const tours = await Tour.findAll({
         where: {
             deleted: false,
@@ -22,4 +24,49 @@ export const index = async (req: Request, res: Response) => {
         pageTitle: "Danh sách tour",
         tours: tours
     });
+};
+
+// [GET]/admin/tours/create
+export const create = async (req: Request, res: Response) => {
+    const categories = await Category.findAll({
+        where: {
+            deleted: false,
+            status: 'active',
+        },
+        raw: true
+    });
+
+    res.render("admin/pages/tours/create", {
+        pageTitle: "Thêm mới tour",
+        categories: categories
+    });
+};
+
+// [GET]/admin/tours/create
+export const createPost = async (req: Request, res: Response) => {
+    const countTour = await Tour.count();
+    const code = generateTourCode(countTour + 1);
+
+    if (req.body.position === "") {
+        req.body.position = countTour + 1;
+    } else {
+        req.body.position = parseInt(req.body.position);
+    }
+
+    const dataTour = {
+        title: req.body.title,
+        code: code,
+        price: parseInt(req.body.price),
+        discount: parseInt(req.body.discount),
+        stock: parseInt(req.body.stock),
+        timeStart: req.body.timeStart,
+        position: req.body.position,
+        status: req.body.status,
+        images: JSON.stringify(req.body.images),
+        information: req.body.information,
+        schedule: req.body.schedule,
+    };
+    console.log(dataTour);
+
+    res.send("ok");
 };
