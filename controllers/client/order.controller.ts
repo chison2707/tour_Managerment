@@ -3,6 +3,7 @@ import Order from "../../models/order.model";
 import { generateOrderCode } from "../../helpers/generate";
 import Tour from "../../models/tour.model";
 import OrderItem from "../../models/order-item.model";
+import { where } from "sequelize";
 
 // [POST] /order
 export const order = async (req: Request, res: Response) => {
@@ -61,8 +62,44 @@ export const order = async (req: Request, res: Response) => {
 }
 
 // [GET] /success
-export const success = (req: Request, res: Response) => {
+export const success = async (req: Request, res: Response) => {
+    const orderCode = req.query.orderCode;
+    const order = await Order.findOne({
+        where: {
+            code: orderCode,
+            deleted: false
+        },
+        raw: true
+    });
+
+    const orderItem = await OrderItem.findAll({
+        where: {
+            orderId: order["id"]
+        },
+        raw: true
+    });
+
+    for (const item of orderItem) {
+        item["price_special"] = item["price"] * (1 - item["discount"] / 100);
+        item["total"] = item["price_special"] * item["quantity"];
+
+        const tourInfo = await Tour.findOne({
+            where: {
+                id: item["tourId"]
+            },
+            raw: true
+        });
+
+        item["title"] = tourInfo["title"];
+        item["slug"] = tourInfo["slug"];
+        item["image"] = JSON.parse(tourInfo["images"])[0];
+    }
+
+    order["total_price"] = orderItem.reduce((sum, item) => sum + item["total"], 0);
+
     res.render("client/pages/order/success", {
-        pageTitle: "Đặt hàng thành công"
+        pageTitle: "Đặt hàng thành công",
+        order: order,
+        orderItem: orderItem
     });
 }

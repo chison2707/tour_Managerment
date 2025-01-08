@@ -1,5 +1,6 @@
 extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
+include ../../mixins/moment.pug
 
 block main
   .container.my-3
@@ -25,7 +26,8 @@ block main
               td #{order.note}
             tr
               td Ngày đặt
-              td #{order.createdAt}
+              td 
+                +formatDateTime(order.createdAt)
 
 
     .row
@@ -42,7 +44,7 @@ block main
               th Số lượng
               th Tổng tiền
           tbody
-            each item, index in ordersItem
+            each item, index in orderItem
               tr
                 td #{index + 1}
                 td
@@ -53,4 +55,4 @@ block main
                 td #{item.quantity}
                 td #{item.total.toLocaleString()}đ
         
-        h5(class="text-right mb-4") Tổng đơn hàng: #{order.total_price.toLocaleString()}đ
+        h5(class="text-end mb-4") Tổng đơn hàng: <b>#{order.total_price.toLocaleString()}đ</b>
