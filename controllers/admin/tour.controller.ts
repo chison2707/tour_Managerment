@@ -2,6 +2,8 @@ import { Request, Response } from "express-serve-static-core";
 import Tour from "../../models/tour.model";
 import Category from "../../models/category.model";
 import { generateTourCode } from "../../helpers/generate";
+import { systemConfig } from "../../config/system";
+import TourCategory from "../../models/tour-category.model";
 
 // [GET]/admin/tours
 export const index = async (req: Request, res: Response) => {
@@ -66,7 +68,15 @@ export const createPost = async (req: Request, res: Response) => {
         information: req.body.information,
         schedule: req.body.schedule,
     };
-    console.log(dataTour);
+    const tour = await Tour.create(dataTour);
+    const tourId = tour["id"];
 
-    res.send("ok");
+    const dataTourCategory = {
+        tour_id: tourId,
+        category_id: parseInt(req.body.category_id)
+    }
+
+    await TourCategory.create(dataTourCategory);
+
+    res.redirect(`${systemConfig.prefixAdmin}/tours`);
 };
