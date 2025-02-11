@@ -1,0 +1,24 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+    +alert-success(3000)
+    +alert-error(3000)
+    .row.mt-2
+        .col-6.mx-auto
+            h2 Thông tin cá nhân
+            ul.list-group
+                li.list-group-item
+                    strong Name:
+                    |  #{user.fullName}
+                li.list-group-item
+                    strong Email:
+                    |  #{user.email}
+                if(user.phone)
+                    li.list-group-item
+                        strong Email:
+                        |  #{user.phone}
+                a(
+                    href="/users/edit"
+                    class="btn btn-secondary mt-2 w-100"
+                ) Chỉnh sủa thông tin cá nhân

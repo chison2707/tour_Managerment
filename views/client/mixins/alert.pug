@@ -1,0 +1,13 @@
+mixin alert-success(time)
+    - if (messages.success)
+        .alert.alert-success(show-alert data-time=time)
+            .alert-icon
+                i.fa.fa-check-circle 
+            .alert-content #{messages.success}
+
+mixin alert-error(time)
+    - if (messages.error)
+        .alert.alert-error(show-alert data-time=time)
+            .alert-icon
+                i.fa.fa-times-circle
+            .alert-content #{messages.error}

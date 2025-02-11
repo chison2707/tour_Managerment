@@ -1,0 +1,59 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+    +alert-success(3000)
+    +alert-error(3000) 
+    .login-container
+        h2 Chỉnh sửa thông tin cá nhân
+        form(
+            action="/users/edit?_method=PATCH"
+            method="POST"
+        )
+            .form-group.mt-2
+                label(for="fullName") Họ và tên:
+                input(
+                    div="fullName"
+                    name="fullName"
+                    class="form-control"
+                    type="text" 
+                    placeholder="Nhập họ và tên của bạn" 
+                    value = user.fullName
+                    required
+                )
+            .form-group.mt-2
+                label(for="email") Email:
+                input(
+                    div="email"
+                    name="email"
+                    class="form-control"
+                    value= user.email
+                    disabled
+                )
+            .form-group.mt-2
+                label(for="phone") Số điện thoại:
+                input(
+                    div="phone"
+                    name="phone"
+                    type="tel"
+                    class="form-control"
+                    placeholder="Nhập số điện thoại của bạn" 
+                    value= user.phone
+                )
+            .form-group.mt-2
+                label(for="password") Nhập mật khẩu mới:
+                input(
+                    div="password"
+                    name="password"
+                    class="form-control"
+                    type="password"
+                )
+            .form-group.mt-2
+                label(for="confirmPassword") Xác nhận mật khẩu mới:
+                input(
+                    div="confirmPassword"
+                    name="confirmPassword"
+                    class="form-control"
+                    type="password"
+                )
+            button.btn.btn-info.w-100.mt-2(type="submit") Xác nhận
