@@ -15,11 +15,7 @@ const ForgotPassword = sequelize.define('ForgotPassword', {
     otp: {
         type: DataTypes.STRING(8),
         allowNull: false
-    },
-    expireAt: {
-        type: DataTypes.DATE,
-        allowNull: false
-    },
+    }
 }, {
     tableName: 'forgot_password',
     timestamps: true

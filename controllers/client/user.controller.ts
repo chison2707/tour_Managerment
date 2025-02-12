@@ -4,6 +4,7 @@ import User from "../../models/user.model";
 import * as generate from "../../helpers/generate";
 import { sendMail } from "../../helpers/sendmail";
 import ForgotPassword from "../../models/forgot-password.model";
+import { where } from "sequelize";
 
 // [GET]/users/login
 export const login = async (req: Request, res: Response) => {
@@ -34,12 +35,12 @@ export const registerPost = async (req: Request, res: Response) => {
         res.redirect("back");
         return;
     }
-    req.body.password = md5(req.body.password);
+    // req.body.password = md5(req.body.password);
     const tokenUser = generate.generateRandomString(20);
     const newUser = {
         fullName: req.body.fullname,
         email: req.body.email,
-        password: req.body.password,
+        password: md5(req.body.password),
         tokenUser: tokenUser
     };
     const user = await User.create(newUser);
@@ -119,21 +120,79 @@ export const forgotPassPost = async (req: Request, res: Response) => {
     const objforgotPassword = {
         email: email,
         otp: otp,
-        expireAt: Date.now()
     };
 
-    ForgotPassword.create(objforgotPassword).then(record => {
-        setTimeout(async () => {
-            await ForgotPassword.destroy({ where: { id: record.dataValues.id } });
-        }, 180000);
-    });
+    await ForgotPassword.create(objforgotPassword);
 
     // gửi mã otp qua email của user
     const subject = "Mã OTP xác minh lấy lại mật khẩu";
     const html = `
-        Mã OTP lấy lại mật khẩu là <b>${otp}</b>.Thời hạn sử dụng là 3 phút. Lưu ý không được để lộ mã OTP
+        Mã OTP lấy lại mật khẩu là <b>${otp}</b>.Mã OTP sẽ xóa khi bạn nhập và chuyển đến trang đổi mật khẩu. Lưu ý không được để lộ mã OTP
     `;
 
     sendMail(email, subject, html);
     res.redirect(`/users/password/otp?email=${email}`);
+}
+
+// [GET]/users/password/otp
+export const otpPassword = async (req: Request, res: Response) => {
+    const email = req.query.email;
+
+    res.render("client/pages/user/otp-password", {
+        pageTitle: "Nhập mã otp",
+        email: email
+    });
+}
+
+// [POST]/users/password/otp
+export const otpPasswordPost = async (req: Request, res: Response) => {
+    const email = req.body.email;
+    const otp = req.body.otp;
+
+    const result = await ForgotPassword.findOne({
+        where: {
+            email: email,
+            otp: otp
+        }
+    });
+
+    if (!result) {
+        req.flash("error", "Mã OTP không đúng!");
+        res.redirect("back");
+        return;
+    };
+    const user = await User.findOne({
+        where: {
+            email: email
+        }
+    })
+    await ForgotPassword.destroy({ where: { email: email } });
+
+    res.cookie("tokenUser", user.dataValues.tokenUser);
+
+    res.redirect(`/users/password/reset`);
+}
+
+// [GET]/users/password/reset
+export const resetPassword = async (req: Request, res: Response) => {
+    res.render("client/pages/user/reset-password", {
+        pageTitle: "Đặt lại mật khẩu"
+    });
+}
+
+// [POST]/users/password/reset
+export const resetPasswordPost = async (req: Request, res: Response) => {
+    const password = req.body.password;
+    const tokenUser = req.cookies.tokenUser;
+
+    await User.update({
+        password: md5(password)
+    }, {
+        where: {
+            tokenUser: tokenUser
+        }
+    });
+
+    req.flash("success", "Đổi mật khẩu thành công!!!");
+    res.redirect("/");
 }
