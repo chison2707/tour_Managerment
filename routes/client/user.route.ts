@@ -7,5 +7,6 @@ router.get('/login', controller.login);
 router.get('/register', controller.register);
 router.post('/register', validate.registerPost, controller.registerPost);
 router.post('/login', controller.loginPost);
+router.get('/logout', controller.logout);
 
 export const userRoutes: Router = router;

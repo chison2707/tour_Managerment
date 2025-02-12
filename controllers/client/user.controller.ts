@@ -81,3 +81,9 @@ export const loginPost = async (req: Request, res: Response) => {
     req.flash("success", "Đăng nhập thành công!");
     res.redirect("/");
 }
+
+// [GET]/users/logout
+export const logout = async (req: Request, res: Response) => {
+    res.clearCookie("tokenUser");
+    res.redirect(`/`);
+}
