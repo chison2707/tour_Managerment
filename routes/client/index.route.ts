@@ -6,7 +6,10 @@ import { orderRoutes } from "./order.route";
 import { homeRoutes } from "./home.route";
 import { userRoutes } from "./user.route";
 
+import * as userMiddleware from "../../middlewares/client/use.middleware";
+
 const clientRoutes = (app: Express): void => {
+    app.use(userMiddleware.infoUser);
 
     app.use('/', homeRoutes)
     app.use('/tours', tourRoutes);
