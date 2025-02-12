@@ -1,45 +1,42 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/database";
 
-const Order = sequelize.define("Order", {
+const User = sequelize.define("Order", {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true,
     },
-    code: {
-        type: DataTypes.STRING(10),
-        allowNull: false,
-    },
     fullName: {
         type: DataTypes.STRING(50),
         allowNull: false,
     },
-    phone: {
-        type: DataTypes.STRING(10),
+    email: {
+        type: DataTypes.STRING(50),
         allowNull: false,
     },
-    note: {
-        type: DataTypes.STRING(500),
+    password: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
     },
-    status: {
+    tokenUser: {
         type: DataTypes.STRING(20),
+        allowNull: false,
+    },
+    phone: {
+        type: DataTypes.STRING(10),
+    },
+    avatar: {
+        type: DataTypes.STRING(250),
     },
     deleted: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
     },
-    deletedAt: {
-        type: DataTypes.DATE,
-    },
-    userId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    }
 }, {
-    tableName: "orders",
+    tableName: "users",
     timestamps: true
 });
 
-export default Order;
+export default User;
