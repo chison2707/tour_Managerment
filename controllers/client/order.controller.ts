@@ -4,18 +4,19 @@ import { generateOrderCode } from "../../helpers/generate";
 import Tour from "../../models/tour.model";
 import OrderItem from "../../models/order-item.model";
 import { where } from "sequelize";
+import { userInfo } from "os";
 
 // [POST] /order
 export const order = async (req: Request, res: Response) => {
     const data = req.body;
-
     // lưu data vào orders
     const dataOrder = {
         code: "",
         fullName: data.info.fullName,
         phone: data.info.phone,
         note: data.info.note,
-        status: "initial"
+        status: "initial",
+        tokenUser: req.cookies.tokenUser
     };
 
     const order = await Order.create(dataOrder);

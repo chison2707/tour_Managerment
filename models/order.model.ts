@@ -33,8 +33,8 @@ const Order = sequelize.define("Order", {
     deletedAt: {
         type: DataTypes.DATE,
     },
-    userId: {
-        type: DataTypes.INTEGER,
+    tokenUser: {
+        type: DataTypes.STRING(20),
         allowNull: false,
     }
 }, {
