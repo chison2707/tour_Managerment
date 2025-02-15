@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/database";
+import slugify from "slugify";
 
 const Category = sequelize.define("Category", {
     id: {
@@ -26,7 +27,8 @@ const Category = sequelize.define("Category", {
     },
     slug: {
         type: DataTypes.STRING(255),
-        allowNull: false
+        allowNull: false,
+        unique: true,
     },
     deleted: {
         type: DataTypes.BOOLEAN,
@@ -38,6 +40,14 @@ const Category = sequelize.define("Category", {
 }, {
     tableName: "categories",
     timestamps: true,
+    hooks: {
+        beforeCreate: (category) => {
+            category["slug"] = slugify(category["title"], { lower: true, strict: true });
+        },
+        beforeUpdate: (category) => {
+            category["slug"] = slugify(category["title"], { lower: true, strict: true });
+        },
+    },
 });
 
 export default Category;
