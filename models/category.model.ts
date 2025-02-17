@@ -22,13 +22,9 @@ const Category = sequelize.define("Category", {
     status: {
         type: DataTypes.STRING(20),
     },
-    position: {
-        type: DataTypes.INTEGER,
-    },
     slug: {
         type: DataTypes.STRING(255),
-        allowNull: false,
-        unique: true,
+        allowNull: true,
     },
     deleted: {
         type: DataTypes.BOOLEAN,
@@ -40,14 +36,13 @@ const Category = sequelize.define("Category", {
 }, {
     tableName: "categories",
     timestamps: true,
-    hooks: {
-        beforeCreate: (category) => {
-            category["slug"] = slugify(category["title"], { lower: true, strict: true });
-        },
-        beforeUpdate: (category) => {
-            category["slug"] = slugify(category["title"], { lower: true, strict: true });
-        },
-    },
+});
+
+Category.beforeCreate((category) => {
+    category["slug"] = slugify(`${category["title"]}-${Date.now()}`, {
+        lower: true,
+        strict: true
+    });
 });
 
 export default Category;
