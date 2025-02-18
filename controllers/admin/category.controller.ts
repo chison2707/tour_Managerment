@@ -43,3 +43,20 @@ export const createPost = async (req: Request, res: Response) => {
         res.redirect(`/${systemConfig.prefixAdmin}/categories`);
     }
 };
+
+// [GET] /admin/categories/edit/:id
+export const edit = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const category = await Category.findOne({
+        where: {
+            id: id,
+            deleted: false,
+        },
+        raw: true
+    });
+
+    res.render("admin/pages/category/edit", {
+        pageTitle: "Chỉnh sửa danh mục tour",
+        category: category
+    });
+};

@@ -10,5 +10,6 @@ const upload = multer();
 router.get("/", controller.index);
 router.get("/create", controller.create);
 router.post("/create", upload.single("avatar"), uploadCould.uploadSingle, categoryValidate.createPost, controller.createPost);
+router.get("/edit/:id", controller.edit);
 
 export const categoryRoutes: Router = router;
