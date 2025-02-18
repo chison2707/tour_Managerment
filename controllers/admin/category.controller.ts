@@ -60,3 +60,27 @@ export const edit = async (req: Request, res: Response) => {
         category: category
     });
 };
+
+// [PATCH] /admin/categories/edit/:id
+export const editPatch = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id;
+        await Category.update({
+            title: req.body.title,
+            image: req.body.avatar,
+            description: req.body.description,
+            status: req.body.status,
+        }, {
+            where: {
+                id: id,
+                deleted: false,
+            }
+        })
+
+        req.flash("success", "Cập nhật danh mục tour thành công!");
+        res.redirect(`/${systemConfig.prefixAdmin}/categories`);
+    } catch (error) {
+        req.flash("error", "Cập nhật danh mục tour thất bại!");
+        res.redirect(`/${systemConfig.prefixAdmin}/categories`);
+    }
+};

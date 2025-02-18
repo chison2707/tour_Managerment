@@ -9,6 +9,7 @@ import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import clientRoutes from "./routes/client/index.route";
 import adminRoutes from "./routes/admin/index.route";
+import methodOverride from 'method-override';
 import { systemConfig } from "./config/system";
 
 dotenv.config();
@@ -19,6 +20,7 @@ const port: number | string = process.env.PORT || 3000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.use(methodOverride("_method"));
 app.use(express.static("public"));
 
 app.set("views", "./views");

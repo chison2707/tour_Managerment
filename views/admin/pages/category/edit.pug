@@ -7,8 +7,8 @@ block main
     h1(class="mb-4") Chỉnh sửa danh mục tour
 
     form(
-            action=`/${prefixAdmin}/categories/edit/${category._id}` 
-            id="form-create-topic" 
+            action=`/${prefixAdmin}/categories/edit/${category.id}?_method=PATCH` 
+            id="form-create-category" 
             method="POST"
             enctype="multipart/form-data"
         )
@@ -76,4 +76,4 @@ block main
                 button(
                     type="submit"
                     class="btn btn-primary"
-                ) Tạo mới
+                ) Cập nhật
