@@ -12,5 +12,6 @@ router.get("/create", controller.create);
 router.post("/create", upload.single("avatar"), uploadCould.uploadSingle, categoryValidate.createCategory, controller.createPost);
 router.get("/edit/:id", controller.edit);
 router.patch("/edit/:id", upload.single("avatar"), uploadCould.uploadSingle, categoryValidate.createCategory, controller.editPatch);
+router.patch("/change-status/:status/:id", controller.changeStatus);
 
 export const categoryRoutes: Router = router;

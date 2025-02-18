@@ -84,3 +84,25 @@ export const editPatch = async (req: Request, res: Response) => {
         res.redirect(`/${systemConfig.prefixAdmin}/categories`);
     }
 };
+
+// [PATCH] /admin/categories/change-status/:status/:id
+export const changeStatus = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id;
+        const status = req.params.status;
+        await Category.update({
+            status: status
+        }, {
+            where: {
+                id: id,
+                deleted: false,
+            }
+        })
+
+        req.flash("success", "Cập nhật trạng thái danh mục tour thành công!");
+        res.redirect(`/${systemConfig.prefixAdmin}/categories`);
+    } catch (error) {
+        req.flash("error", "Cập nhật trạng thái danh mục tour thất bại!");
+        res.redirect(`/${systemConfig.prefixAdmin}/categories`);
+    }
+};
