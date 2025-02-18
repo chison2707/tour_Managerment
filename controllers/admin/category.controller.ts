@@ -106,3 +106,19 @@ export const changeStatus = async (req: Request, res: Response) => {
         res.redirect(`/${systemConfig.prefixAdmin}/categories`);
     }
 };
+
+// [DELETE] /admin/categories/delete/:id
+export const deleteCategory = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id;
+        await Category.destroy({
+            where: { id: id }
+        })
+
+        req.flash("success", "Xóa danh mục tour thành công!");
+        res.redirect(`/${systemConfig.prefixAdmin}/categories`);
+    } catch (error) {
+        req.flash("error", "Xóa danh mục tour thất bại!");
+        res.redirect(`/${systemConfig.prefixAdmin}/categories`);
+    }
+};
