@@ -1,0 +1,155 @@
+extends ../../layouts/default.pug
+
+block main
+  h1(class="mb-4") #{pageTitle}
+
+  form(
+      action=`/${prefixAdmin}/tours/create`
+      method="POST"
+      enctype="multipart/form-data"
+    )
+      div(class="form-group")
+        label(for="title") Tiêu đề
+        input(
+          type="text"
+          class="form-control"
+          id="title"
+          name="title"
+          value = tour.title
+          required
+        )
+      div(class="form-group")
+        label(for="category") Danh mục
+        select(
+          name="category_id"
+          id="category"
+          class="form-control"
+          required
+        )
+          option(value="" disabled selected) -- Chọn danh mục --
+          each item in categories
+            option(
+              value=item.id
+              selected=(item.id == tourCategory.category_id ? true : false)
+            ) #{item.title}
+      div(class="form-group")
+        label(for="images") Chọn nhiều ảnh
+        input(
+          type="file"
+          class="form-control-file"
+          id="images"
+          name="images"
+          accept="image/*"
+          multiple
+        )
+        div#imagePreview.mt-2
+          each image in JSON.parse(tour.images)
+            div.d-inline-block.position-relative.mr-2
+              img(
+                src=image 
+                alt="Ảnh tour" 
+                class="img-thumbnail mr-2" 
+                style="width: 100px; height: 100px;"
+              )
+              button(
+                type="button"
+                class="btn btn-danger btn-sm position-absolute"
+                style="top: 5px; right: 5px;"
+              ) x
+      div(class="form-group")
+        label(for="price") Giá
+        input(
+          type="number"
+          class="form-control"
+          id="price"
+          name="price"
+          value=tour.price
+          min="0"
+          required
+        )
+      div(class="form-group")
+        label(for="discount") % Giảm giá
+        input(
+          type="number"
+          class="form-control"
+          id="discount"
+          name="discount"
+          value=tour.discount
+          min="0"
+          required
+        )
+      div(class="form-group")
+        label(for="stock") Số lượng
+        input(
+          type="number"
+          class="form-control"
+          id="stock"
+          name="stock"
+          value=tour.stock
+          min="0"
+          required
+        )
+      div(class="form-group")
+        label(for="timeStart") Lịch khởi hành
+        input(
+          type="datetime-local"
+          class="form-control"
+          id="timeStart"
+          name="timeStart"
+          value=tour.timeStart.toISOString().slice(0, 16)
+          min="0"
+        )
+      div(class="form-group")
+        label(for="information") Thông tin tour
+        textarea(
+          class="form-control textarea-mce"
+          type="text"
+          id="information"
+          name="information"
+          rows="5"
+        ) !{tour.information}
+      div(class="form-group")
+        label(for="schedule") Lịch trình tour
+        textarea(
+          class="form-control textarea-mce"
+          type="text"
+          id="schedule"
+          name="schedule"
+          rows="5"
+        ) !{tour.schedule}
+      div(class="form-group")
+        label(for="position") Vị trí
+        input(
+          type="number"
+          class="form-control"
+          id="position"
+          name="position"
+          placeholder="Tự động tăng"
+          value = tour.position
+          min="1"
+        )
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusActive"
+          name="status"
+          value="active"
+          checked=(tour.status == "active" ? true: false)
+        )
+        label(for="statusActive" class="form-check-label") Hoạt động
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusInActive"
+          name="status"
+          value="inactive"
+          checked=(tour.status == "inactive" ? true: false)
+        )
+        label(for="statusInActive" class="form-check-label") Dừng hoạt động
+      div(class="form-group")
+        button(
+          type="submit"
+          class="btn btn-primary"
+        ) Tạo mới

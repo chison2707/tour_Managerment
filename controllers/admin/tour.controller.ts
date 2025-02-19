@@ -44,7 +44,7 @@ export const create = async (req: Request, res: Response) => {
     });
 };
 
-// [GET]/admin/tours/create
+// [POST]/admin/tours/create
 export const createPost = async (req: Request, res: Response) => {
     const countTour = await Tour.count();
     const code = generateTourCode(countTour + 1);
@@ -79,4 +79,38 @@ export const createPost = async (req: Request, res: Response) => {
     await TourCategory.create(dataTourCategory);
 
     res.redirect(`${systemConfig.prefixAdmin}/tours`);
+};
+
+// [GET]/admin/tours/edit/:id
+export const edit = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const tour = await Tour.findOne({
+        where: {
+            id: id,
+            deleted: false,
+            status: 'active',
+        },
+        raw: true
+    });
+
+    const tourCategory = await TourCategory.findOne({
+        where: {
+            tour_id: tour["id"]
+        },
+        raw: true
+    });
+    const categories = await Category.findAll({
+        where: {
+            deleted: false,
+            status: 'active',
+        },
+        raw: true
+    });
+
+    res.render("admin/pages/tours/edit", {
+        pageTitle: "Chỉnh sửa tour",
+        tour: tour,
+        categories: categories,
+        tourCategory: tourCategory
+    });
 };
