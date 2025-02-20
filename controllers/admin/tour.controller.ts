@@ -78,7 +78,7 @@ export const createPost = async (req: Request, res: Response) => {
 
     await TourCategory.create(dataTourCategory);
 
-    res.redirect(`${systemConfig.prefixAdmin}/tours`);
+    res.redirect(`/${systemConfig.prefixAdmin}/tours`);
 };
 
 // [GET]/admin/tours/edit/:id
@@ -180,6 +180,24 @@ export const changeStatus = async (req: Request, res: Response) => {
         res.redirect(`/${systemConfig.prefixAdmin}/tours`);
     } catch (error) {
         req.flash("error", "Có lỗi xảy ra, vui lòng thử lại sau");
+        res.redirect(`/${systemConfig.prefixAdmin}/tours`);
+    }
+};
+
+// [DELETE]/admin/delete/:id
+export const deleteTour = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id;
+
+        await TourCategory.destroy({ where: { tour_id: id } });
+        await Tour.destroy({
+            where: { id: id }
+        });
+
+        req.flash("success", "Xóa tour thành công!");
+        res.redirect(`/${systemConfig.prefixAdmin}/tours`);
+    } catch (error) {
+        req.flash("error", "Xóa tour thất bại!");
         res.redirect(`/${systemConfig.prefixAdmin}/tours`);
     }
 };
