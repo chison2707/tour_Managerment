@@ -15,7 +15,7 @@ const clientRoutes = (app: Express): void => {
     app.use('/', homeRoutes)
     app.use('/tours', tourRoutes);
     app.use('/categories', categoriesRoutes);
-    app.use('/users', requireAuth, userRoutes);
+    app.use('/users', userRoutes);
     app.use('/cart', requireAuth, cartRoutes);
     app.use('/order', requireAuth, orderRoutes);
 }

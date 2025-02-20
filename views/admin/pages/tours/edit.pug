@@ -4,7 +4,7 @@ block main
   h1(class="mb-4") #{pageTitle}
 
   form(
-      action=`/${prefixAdmin}/tours/create`
+      action=`/${prefixAdmin}/tours/edit/${tour.id}?_method=PATCH`
       method="POST"
       enctype="multipart/form-data"
     )
@@ -44,18 +44,12 @@ block main
         )
         div#imagePreview.mt-2
           each image in JSON.parse(tour.images)
-            div.d-inline-block.position-relative.mr-2
-              img(
-                src=image 
-                alt="Ảnh tour" 
-                class="img-thumbnail mr-2" 
-                style="width: 100px; height: 100px;"
-              )
-              button(
-                type="button"
-                class="btn btn-danger btn-sm position-absolute"
-                style="top: 5px; right: 5px;"
-              ) x
+            img(
+              src=image 
+              alt="Ảnh tour" 
+              class="img-thumbnail mr-2" 
+              style="width: 100px; height: 100px;"
+            )
       div(class="form-group")
         label(for="price") Giá
         input(
@@ -152,4 +146,4 @@ block main
         button(
           type="submit"
           class="btn btn-primary"
-        ) Tạo mới
+        ) Cập nhật
