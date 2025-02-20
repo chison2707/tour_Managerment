@@ -116,62 +116,6 @@ export const edit = async (req: Request, res: Response) => {
 };
 
 // [PATCH]/admin/tours/edit/:id
-// export const editPatch = async (req: Request, res: Response) => {
-//     const id = req.params.id;
-
-//     if (!req.body.images) {
-//         await Tour.update({
-//             title: req.body.title,
-//             price: parseInt(req.body.price),
-//             discount: parseInt(req.body.discount),
-//             stock: parseInt(req.body.stock),
-//             timeStart: req.body.timeStart,
-//             position: parseInt(req.body.position),
-//             status: req.body.status,
-//             information: req.body.information,
-//             schedule: req.body.schedule,
-//         }, {
-//             where: {
-//                 id: id,
-//                 deleted: false,
-//             }
-//         });
-//         await TourCategory.update({
-//             category_id: parseInt(req.body.category_id)
-//         }, {
-//             where: {
-//                 tour_id: id,
-//             }
-//         });
-//     } else {
-//         await Tour.update({
-//             title: req.body.title,
-//             price: parseInt(req.body.price),
-//             discount: parseInt(req.body.discount),
-//             stock: parseInt(req.body.stock),
-//             timeStart: req.body.timeStart,
-//             position: parseInt(req.body.position),
-//             status: req.body.status,
-//             images: JSON.stringify(req.body.images),
-//             information: req.body.information,
-//             schedule: req.body.schedule,
-//         }, {
-//             where: {
-//                 id: id,
-//                 deleted: false,
-//             }
-//         });
-//         await TourCategory.update({
-//             category_id: parseInt(req.body.category_id)
-//         }, {
-//             where: {
-//                 tour_id: id,
-//             }
-//         });
-//     }
-//     res.redirect(`${systemConfig.prefixAdmin}/tours`);
-// };
-
 export const editPatch = async (req: Request, res: Response) => {
     try {
         const id = req.params.id;
@@ -212,6 +156,28 @@ export const editPatch = async (req: Request, res: Response) => {
             req.flash("error", "Có lỗi xảy ra, vui lòng thử lại sau");
             res.redirect(`/${systemConfig.prefixAdmin}/tours`);
         }
+    } catch (error) {
+        req.flash("error", "Có lỗi xảy ra, vui lòng thử lại sau");
+        res.redirect(`/${systemConfig.prefixAdmin}/tours`);
+    }
+};
+
+// [PATCH]/admin/change-status/:status/:id
+export const changeStatus = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id;
+        const status = req.params.status;
+        await Tour.update(
+            {
+                status: status
+            },
+            {
+                where: {
+                    id: id,
+                }
+            });
+        req.flash("success", "Cập nhật trạng thái thành công");
+        res.redirect(`/${systemConfig.prefixAdmin}/tours`);
     } catch (error) {
         req.flash("error", "Có lỗi xảy ra, vui lòng thử lại sau");
         res.redirect(`/${systemConfig.prefixAdmin}/tours`);

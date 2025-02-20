@@ -52,11 +52,17 @@ block main
                 if (item.status === "active")
                   a(
                     href="javascript:;"
+                    data-status=item.status
+                    data-id = item.id 
+                    button-change-status
                     class="badge badge-success"
                   ) Hoạt động
                 else
                   a(
                     href="javascript:;"
+                    data-status=item.status
+                    data-id = item.id 
+                    button-change-status
                     class="badge badge-danger"
                   ) Dừng hoạt động
               td #{item.position}
@@ -74,3 +80,17 @@ block main
                   button-delete
                   data-id=item.id
                 ) Xóa
+
+  form(
+    action=""
+    method="POST"
+    id="form-delete-item"
+    data-path=`/${prefixAdmin}/tours/delete`
+  ) 
+
+  form(
+    action=""
+    method="POST"
+    id="form-change-status"
+    data-path=`/${prefixAdmin}/tours/change-status`
+  ) 
