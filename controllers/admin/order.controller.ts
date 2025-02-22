@@ -15,17 +15,18 @@ export const index = async (req: Request, res: Response) => {
         orders.phone AS customer_phone,
         orders.status,
     GROUP_CONCAT(
-        CONCAT(tours.title, ' (', orders_item.quantity, ' x ', ROUND(tours.price * (1 - tours.discount/100),0), '₫)') 
+        CONCAT(tours.title, ' (', orders_item.quantity, ' x ', FORMAT(ROUND(tours.price * (1 - tours.discount/100),0), 0), '₫)') 
         SEPARATOR ', '
     ) AS tour_details,
     SUM(orders_item.quantity * ROUND(tours.price * (1 - tours.discount/100),0)) AS total_amount
     FROM orders
     JOIN orders_item ON orders.id = orders_item.orderId
     JOIN tours ON orders_item.tourId = tours.id
-    WHERE orders.deleted = false
+    WHERE orders.deleted = :deleted
     GROUP BY orders.id, orders.code, orders.fullName, orders.phone;
     `, {
-        type: QueryTypes.SELECT
+        type: QueryTypes.SELECT,
+        replacements: { deleted: false }
     });
 
     res.render("admin/pages/order/index", {
