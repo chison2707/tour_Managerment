@@ -4,12 +4,13 @@ import { systemConfig } from "../../config/system";
 import OrderItem from "../../models/order-item.model";
 import sequelize from "../../config/database";
 import { QueryTypes } from "sequelize";
+import Tour from "../../models/tour.model";
 
 // [GET] /admin/categories
 export const index = async (req: Request, res: Response) => {
-    const tours = await sequelize.query(`
+    const orders = await sequelize.query(`
       SELECT 
-        orders.id AS order_id,
+        orders.id,
         orders.code AS order_code,
         orders.fullName AS customer_name,
         orders.phone AS customer_phone,
@@ -23,7 +24,7 @@ export const index = async (req: Request, res: Response) => {
     JOIN orders_item ON orders.id = orders_item.orderId
     JOIN tours ON orders_item.tourId = tours.id
     WHERE orders.deleted = :deleted
-    GROUP BY orders.id, orders.code, orders.fullName, orders.phone;
+    GROUP BY orders.id, orders.code, orders.fullName, orders.phone,orders.status;
     `, {
         type: QueryTypes.SELECT,
         replacements: { deleted: false }
@@ -31,6 +32,48 @@ export const index = async (req: Request, res: Response) => {
 
     res.render("admin/pages/order/index", {
         pageTitle: "Danh sách đơn hàng",
-        tours: tours
+        orders: orders
+    });
+};
+
+// [GET] /admin/categories
+export const detail = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const order = await Order.findOne({
+        where: {
+            id: id,
+            deleted: false
+        },
+        raw: true
+    });
+
+    const orderItem = await OrderItem.findAll({
+        where: {
+            orderId: order["id"]
+        },
+        raw: true
+    });
+
+    for (const item of orderItem) {
+        item["price_special"] = item["price"] * (1 - item["discount"] / 100);
+        item["total"] = item["price_special"] * item["quantity"];
+
+        const tourInfo = await Tour.findOne({
+            where: {
+                id: item["tourId"]
+            },
+            raw: true
+        });
+
+        item["title"] = tourInfo["title"];
+        item["slug"] = tourInfo["slug"];
+        item["image"] = JSON.parse(tourInfo["images"])[0];
+    }
+
+    order["total_price"] = orderItem.reduce((sum, item) => sum + item["total"], 0);
+    res.render("admin/pages/order/detail", {
+        pageTitle: "Chi tiết đơn hàng",
+        order: order,
+        orderItem: orderItem
     });
 };
