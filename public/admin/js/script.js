@@ -92,3 +92,24 @@ if (buttonsChangeStatus.length > 0) {
     });
 }
 // end change status
+
+// change status order
+const buttonsChangeStatusOrder = document.querySelectorAll("[button-change-status-order]");
+if (buttonsChangeStatusOrder.length > 0) {
+    const formChangeStatus = document.querySelector("#form-change-status-order");
+    const path = formChangeStatus.getAttribute("data-path");
+    buttonsChangeStatusOrder.forEach(button => {
+        button.addEventListener("click", () => {
+            const statusCurrent = button.getAttribute("data-status");
+            const id = button.getAttribute("data-id");
+
+            let statusChange = statusCurrent == "confirm" ? "initial" : "confirm";
+
+            const action = path + `/${statusChange}/${id}?_method=PATCH`;
+            formChangeStatus.action = action;
+
+            formChangeStatus.submit();
+        });
+    });
+}
+// end change status order

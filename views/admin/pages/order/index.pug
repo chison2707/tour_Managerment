@@ -37,16 +37,12 @@ block main
                     href="javascript:;"
                     data-status=item.status
                     data-id = item.id 
-                    button-change-status
-                    class="badge badge-success"
+                    button-change-status-order
+                    class="badge badge-warning"
                   ) Ban đầu
                 else
-                  a(
-                    href="javascript:;"
-                    data-status=item.status
-                    data-id = item.id 
-                    button-change-status
-                    class="badge badge-danger"
+                  span(
+                    class="badge badge-success"
                   ) Xác nhận
               td
                 a(
@@ -69,6 +65,6 @@ block main
   form(
     action=""
     method="POST"
-    id="form-change-status"
+    id="form-change-status-order"
     data-path=`/${prefixAdmin}/orders/change-status`
   ) 

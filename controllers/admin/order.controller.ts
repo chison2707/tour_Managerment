@@ -3,7 +3,7 @@ import Order from "../../models/order.model";
 import { systemConfig } from "../../config/system";
 import OrderItem from "../../models/order-item.model";
 import sequelize from "../../config/database";
-import { QueryTypes } from "sequelize";
+import { QueryTypes, where } from "sequelize";
 import Tour from "../../models/tour.model";
 
 // [GET] /admin/orders
@@ -95,7 +95,30 @@ export const deleteOrder = async (req: Request, res: Response) => {
         req.flash("success", "Xóa đơn hàng thành công");
         res.redirect(`/${systemConfig.prefixAdmin}/orders`);
     } catch (error) {
-        req.flash("success", "Xóa đơn hàng thất bại");
+        req.flash("error", "Xóa đơn hàng thất bại");
+        res.redirect(`/${systemConfig.prefixAdmin}/orders`);
+    }
+};
+
+// [GET] /admin/orders/change-status/:status/:id
+export const changeStatus = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id;
+        const status = req.params.status;
+        await Order.update(
+            {
+                status: status
+            },
+            {
+                where: {
+                    id: id,
+                }
+            });
+
+        req.flash("success", "Cập nhật trạng thái đơn hàng thành công!");
+        res.redirect(`/${systemConfig.prefixAdmin}/orders`);
+    } catch (error) {
+        req.flash("error", "Cập nhật trạng thái đơn hàng thất bại!");
         res.redirect(`/${systemConfig.prefixAdmin}/orders`);
     }
 };
