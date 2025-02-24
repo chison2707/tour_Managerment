@@ -6,7 +6,7 @@ import sequelize from "../../config/database";
 import { QueryTypes } from "sequelize";
 import Tour from "../../models/tour.model";
 
-// [GET] /admin/categories
+// [GET] /admin/orders
 export const index = async (req: Request, res: Response) => {
     const orders = await sequelize.query(`
       SELECT 
@@ -36,7 +36,7 @@ export const index = async (req: Request, res: Response) => {
     });
 };
 
-// [GET] /admin/categories
+// [GET] /admin/orders/detail/:id
 export const detail = async (req: Request, res: Response) => {
     const id = req.params.id;
     const order = await Order.findOne({
@@ -76,4 +76,26 @@ export const detail = async (req: Request, res: Response) => {
         order: order,
         orderItem: orderItem
     });
+};
+// [GET] /admin/categories
+export const deleteOrder = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id;
+        await OrderItem.destroy({
+            where: {
+                orderId: id
+            },
+        });
+        await Order.destroy({
+            where: {
+                id: id,
+                deleted: false
+            },
+        });
+        req.flash("success", "Xóa đơn hàng thành công");
+        res.redirect(`/${systemConfig.prefixAdmin}/orders`);
+    } catch (error) {
+        req.flash("success", "Xóa đơn hàng thất bại");
+        res.redirect(`/${systemConfig.prefixAdmin}/orders`);
+    }
 };
