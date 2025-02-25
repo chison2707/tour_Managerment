@@ -77,3 +77,11 @@ export const editPatch = async (req: Request, res: Response) => {
     req.flash('success', 'Cập nhật nhóm quyền thành công');
     res.redirect(`/${systemConfig.prefixAdmin}/roles`);
 }
+
+//[ DELETE] / admin/roles/delete/:id
+export const deleteRole = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    await Role.destroy({ where: { id: id } });
+    req.flash('success', 'Xóa nhóm quyền thành công');
+    res.redirect(`/${systemConfig.prefixAdmin}/roles`);
+}
