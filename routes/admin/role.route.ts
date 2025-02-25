@@ -7,5 +7,6 @@ router.get("/", controller.index);
 router.get("/create", controller.create);
 router.post("/create", controller.createPost);
 router.get('/detail/:id', controller.detail);
+router.get('/edit/:id', controller.edit);
 
 export const roleRoutes: Router = router;

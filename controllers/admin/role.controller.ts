@@ -51,3 +51,16 @@ export const detail = async (req: Request, res: Response) => {
         record: record,
     });
 }
+
+//[GET] / admin/roles/edit/:id
+export const edit = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const record = await Role.findOne({
+        where: { id: id, deleted: false },
+        raw: true
+    });
+    res.render("admin/pages/roles/edit", {
+        pageTitle: "Chỉnh sửa nhóm quyền",
+        record: record
+    });
+}
