@@ -37,3 +37,17 @@ export const createPost = async (req: Request, res: Response) => {
         res.redirect(`/${systemConfig.prefixAdmin}/roles`);
     }
 }
+
+//[GET] / admin/roles/detail/:id
+export const detail = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const record = await Role.findOne({
+        where: { id: id, deleted: false },
+        raw: true
+    });
+    res.render("admin/pages/roles/detail", {
+        // const record = await Role.findOne({ _id: req.params.id });
+        pageTitle: `Chi tiết ${record["title"]}`,
+        record: record,
+    });
+}

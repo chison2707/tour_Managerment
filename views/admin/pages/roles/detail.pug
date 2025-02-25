@@ -1,0 +1,21 @@
+extends ../../layouts/default.pug
+
+block main
+    .container.mt-5
+    .card
+        .card-header.bg-primary.text-white
+            h3.mb-0 Chi tiết nhóm quyền #{record.title}
+        .card-body
+            .mb-3
+            label.form-label.fw-bold Title:
+            p#roleTitle.form-control-plaintext #{record.title}
+            .mb-3
+            label.form-label.fw-bold Description:
+            p#roleDescription.form-control-plaintext #{record.description}
+            .mb-3
+            label.form-label.fw-bold Permissions:
+            ul#rolePermissions.list-group
+                each permission in record.permissions
+                    li.list-group-item <b>#{permission}</b>
+        .card-footer
+            a.btn.btn-secondary(href=`/${prefixAdmin}/roles/edit/${record.id}`) Chỉnh sửa
