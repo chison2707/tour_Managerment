@@ -14,3 +14,10 @@ export const index = async (req: Request, res: Response) => {
         records: records,
     });
 }
+
+//[GET] / admin/roles/create
+export const create = async (req: Request, res: Response) => {
+    res.render("admin/pages/roles/create", {
+        pageTitle: "Danh sách nhóm quyền"
+    });
+}
