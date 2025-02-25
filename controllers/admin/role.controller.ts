@@ -64,3 +64,16 @@ export const edit = async (req: Request, res: Response) => {
         record: record
     });
 }
+
+//[PATCH] / admin/roles/edit/:id
+export const editPatch = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    await Role.update({
+        title: req.body.title,
+        description: req.body.description,
+    }, {
+        where: { id: id }
+    })
+    req.flash('success', 'Cập nhật nhóm quyền thành công');
+    res.redirect(`/${systemConfig.prefixAdmin}/roles`);
+}
