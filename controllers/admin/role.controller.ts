@@ -85,3 +85,15 @@ export const deleteRole = async (req: Request, res: Response) => {
     req.flash('success', 'Xóa nhóm quyền thành công');
     res.redirect(`/${systemConfig.prefixAdmin}/roles`);
 }
+
+//[GET] / admin/roles/permissions
+export const permissions = async (req: Request, res: Response) => {
+    const records = await Role.findAll({
+        where: { deleted: false },
+        raw: true
+    });
+    res.render("admin/pages/roles/permissions", {
+        pageTitle: "Phân quyền",
+        records: records,
+    });
+}
