@@ -164,14 +164,14 @@ export const detail = async (req: Request, res: Response) => {
     });
 }
 
-// //[DELETE] / admin/accounts/delete/:id
-// export const deleteAccount = async (req: Request, res: Response) => {
-//     const id = req.params.id;
-//     await Account.deleteOne({ _id: id });
+//[DELETE] / admin/accounts/delete/:id
+export const deleteAccount = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    await adminAccount.destroy({ where: { id: id } });
 
-//     req.flash("success", "Xóa tài khoản thành công");
-//     res.redirect(`/${systemConfig.prefixAdmin}/accounts`);
-// }
+    req.flash("success", "Xóa tài khoản thành công");
+    res.redirect(`/${systemConfig.prefixAdmin}/accounts`);
+}
 
 //[PATCH] / admin/accounts/change-status/:status/:id
 export const changeStatus = async (req: Request, res: Response) => {
