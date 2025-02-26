@@ -11,5 +11,7 @@ router.get("/create", controller.create);
 router.post("/create", upload.single("avatar"), uploadCould.uploadSingle, controller.createPost);
 router.get("/detail/:id", controller.detail);
 router.get("/edit/:id", controller.edit);
+router.patch("/edit/:id", upload.single("avatar"), uploadCould.uploadSingle, controller.editPatch);
+router.patch("/change-status/:status/:id", controller.changeStatus);
 
 export const accountRoutes: Router = router;
