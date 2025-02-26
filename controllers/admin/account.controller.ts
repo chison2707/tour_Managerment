@@ -71,11 +71,13 @@ export const createPost = async (req: Request, res: Response) => {
 // //[GET] / admin/accounts/edit/:id
 // export const edit = async (req: Request, res: Response) => {
 //     const id = req.params.id;
-//     const data = await Account.findOne({
-//         _id: id,
-//         deleted: false
-//     })
-//     const roles = await Role.find({ deleted: false });
+//     const data = await adminAccount.findOne({
+//       where: {
+//         id: id
+//       },
+//       raw: true
+//     });
+//     // const roles = await Role.find({ deleted: false });
 
 //     res.render("admin/pages/accounts/edit", {
 //         pageTitle: "Chỉnh sửa tài khoản",
@@ -112,24 +114,33 @@ export const createPost = async (req: Request, res: Response) => {
 //     res.redirect(`/${systemConfig.prefixAdmin}/accounts`);
 // }
 
-// //[GET] / admin/accounts/detail/:id
-// export const detail = async (req: Request, res: Response) => {
-//     const id = req.params.id;
-//     const data = await Account.findOne({
-//         _id: id,
-//         deleted: false
-//     }).select("-password -token");
-//     const role = await Role.findOne({
-//         _id: data.role_id,
-//         deleted: false
-//     });
+//[GET] / admin/accounts/detail/:id
+export const detail = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const data = await adminAccount.findOne({
+        where: {
+            id: id,
+        },
+        raw: true,
+        attributes: {
+            exclude: ['password', 'token']
+        }
+    });
 
-//     res.render("admin/pages/accounts/detail", {
-//         pageTitle: "Xem chi tiết tài khoản",
-//         data: data,
-//         role: role
-//     });
-// }
+    const role = await Role.findOne({
+        where: {
+            id: data["role_id"],
+            deleted: false
+        },
+        raw: true
+    });
+
+    res.render("admin/pages/accounts/detail", {
+        pageTitle: "Xem chi tiết tài khoản",
+        data: data,
+        role: role
+    });
+}
 
 // //[DELETE] / admin/accounts/delete/:id
 // export const deleteAccount = async (req: Request, res: Response) => {
