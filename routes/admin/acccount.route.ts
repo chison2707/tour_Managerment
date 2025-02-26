@@ -10,5 +10,6 @@ router.get("/", controller.index);
 router.get("/create", controller.create);
 router.post("/create", upload.single("avatar"), uploadCould.uploadSingle, controller.createPost);
 router.get("/detail/:id", controller.detail);
+router.get("/edit/:id", controller.edit);
 
 export const accountRoutes: Router = router;

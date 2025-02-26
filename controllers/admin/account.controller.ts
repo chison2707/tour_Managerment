@@ -68,23 +68,28 @@ export const createPost = async (req: Request, res: Response) => {
     }
 }
 
-// //[GET] / admin/accounts/edit/:id
-// export const edit = async (req: Request, res: Response) => {
-//     const id = req.params.id;
-//     const data = await adminAccount.findOne({
-//       where: {
-//         id: id
-//       },
-//       raw: true
-//     });
-//     // const roles = await Role.find({ deleted: false });
+//[GET] / admin/accounts/edit/:id
+export const edit = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const data = await adminAccount.findOne({
+        where: {
+            id: id
+        },
+        raw: true
+    });
+    const roles = await Role.findAll({
+        where: {
+            deleted: false
+        },
+        raw: true
+    });
 
-//     res.render("admin/pages/accounts/edit", {
-//         pageTitle: "Chỉnh sửa tài khoản",
-//         data: data,
-//         roles: roles
-//     });
-// }
+    res.render("admin/pages/accounts/edit", {
+        pageTitle: "Chỉnh sửa tài khoản",
+        data: data,
+        roles: roles
+    });
+}
 
 // //[PATCH] / admin/accounts/edit/:id
 // export const editPatch = async (req: Request, res: Response) => {
