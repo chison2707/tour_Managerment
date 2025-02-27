@@ -12,3 +12,19 @@ export const index = async (req: Request, res: Response) => {
         users: users
     });
 }
+
+//[GET] / admin/users/detail/:id
+export const detail = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const data = await User.findOne({
+        where: {
+            id: id,
+            deleted: false
+        },
+        raw: true
+    });
+    res.render("admin/pages/users/detail", {
+        pageTitle: "Chi tiết tài khoản user",
+        data: data
+    });
+}
