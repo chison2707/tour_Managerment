@@ -49,3 +49,20 @@ export const changeStatus = async (req: Request, res: Response) => {
         res.redirect(`/${systemConfig.prefixAdmin}/users`);
     }
 }
+
+//[DELETE] / admin/users/delete/:id
+export const deleteUser = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id;
+        await User.destroy({
+            where: {
+                id: id
+            }
+        });
+        req.flash("success", "Xóa tài khoản thành công");
+        res.redirect(`/${systemConfig.prefixAdmin}/users`);
+    } catch (error) {
+        req.flash("error", "Xóa tài khoản thất bại");
+        res.redirect(`/${systemConfig.prefixAdmin}/users`);
+    }
+}
