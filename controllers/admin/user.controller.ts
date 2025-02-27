@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import User from "../../models/user.model";
+import { systemConfig } from "../../config/system";
 
 //[GET] / admin/users
 export const index = async (req: Request, res: Response) => {
@@ -27,4 +28,24 @@ export const detail = async (req: Request, res: Response) => {
         pageTitle: "Chi tiết tài khoản user",
         data: data
     });
+}
+
+//[PATCH] / admin/users/change-status/:status/:id
+export const changeStatus = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id;
+        const status = req.params.status;
+        await User.update({
+            status: status
+        }, {
+            where: {
+                id: id
+            }
+        });
+        req.flash("success", "Cập nhật trạng thái thành công");
+        res.redirect(`/${systemConfig.prefixAdmin}/users`);
+    } catch (error) {
+        req.flash("error", "Cập nhật trạng thái thất bại");
+        res.redirect(`/${systemConfig.prefixAdmin}/users`);
+    }
 }
