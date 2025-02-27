@@ -1,0 +1,37 @@
+extends ../../layouts/default.pug
+include ../../mixins/pagination.pug
+include ../../mixins/alert.pug
+
+block main
+    +alert-success(3000)
+    +alert-error(3000)
+    div.container.my-5
+        div.card
+            div.card-header.bg-primary.text-white
+                h3 Chi tiết tài khoản
+            div.card-body
+                .row.mb-3
+                    .col-md-3
+                        strong Full Name:
+                    .col-md-9 #{data.fullName}
+                .row.mb-3
+                    .col-md-3
+                        strong Email:
+                    .col-md-9 #{data.email}
+                .row.mb-3
+                    .col-md-3
+                        strong Phone:
+                    .col-md-9 #{data.phone}
+                .row.mb-3
+                    .col-md-3
+                        strong Avatar:
+                    .col-md-9
+                        img.img-fluid.rounded(style="max-width: 150px;", src=data.avatar, alt=data.fullName)
+                .row.mb-3
+                    .col-md-3
+                        strong Status:
+                    .col-md-9 #{data.status}
+            div.card-footer.text-end
+                a.btn.btn-secondary(
+                    href=`/admin/users`
+                ) Quay lại

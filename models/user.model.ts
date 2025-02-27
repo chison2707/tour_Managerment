@@ -30,6 +30,9 @@ const User = sequelize.define("User", {
     avatar: {
         type: DataTypes.STRING(250),
     },
+    status: {
+        type: DataTypes.STRING(20),
+    },
     deleted: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
