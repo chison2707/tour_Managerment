@@ -122,3 +122,20 @@ export const deleteCategory = async (req: Request, res: Response) => {
         res.redirect(`/${systemConfig.prefixAdmin}/categories`);
     }
 };
+
+// [GET] /admin/categories/detail/:id
+export const detail = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const category = await Category.findOne({
+        where: {
+            id: id,
+            deleted: false,
+        },
+        raw: true
+    });
+    console.log(category)
+    res.render("admin/pages/category/detail", {
+        pageTitle: "Chi tiết tour",
+        category: category
+    });
+};
