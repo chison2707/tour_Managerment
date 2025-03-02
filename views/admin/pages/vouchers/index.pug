@@ -1,0 +1,86 @@
+extends ../../layouts/default.pug
+
+block main
+  h1(class="mb-4") #{pageTitle}
+
+  .card.mb-3
+    .card-header Danh sách
+    .card-body
+      .row
+        .col-8
+          
+        .col-4.text-right
+          a(
+            href=`/${prefixAdmin}/vouchers/create`
+            class="btn btn-outline-success"
+          ) + Thêm mới
+
+
+      table(
+        class="table table-hover table-sm mt-3"
+      )
+        thead
+          tr
+            th STT
+            th Mã voucher
+            th % Giảm giá
+            th Còn lại
+            th Thời gian hết hạn
+            th Trạng thái
+            th Hành động
+
+        tbody
+          each item, index in vouchers
+            tr 
+              td #{index+1}
+              td #{item.code}
+              td #{item.discount}
+              td #{item.quantity}
+              td #{item.stock}
+              td #{item.expiredAt}
+              td
+                if (item.status === "active")
+                  a(
+                    href="javascript:;"
+                    data-status=item.status
+                    data-id = item.id 
+                    button-change-status
+                    class="badge badge-success"
+                  ) Hoạt động
+                else
+                  a(
+                    href="javascript:;"
+                    data-status=item.status
+                    data-id = item.id 
+                    button-change-status
+                    class="badge badge-danger"
+                  ) Kết thúc
+              td #{item.position}
+              td
+                a(
+                  class="btn btn-secondary btn-sm"
+                  href=`/${prefixAdmin}/vouchers/detail/${item.id}`
+                ) Chi tiết
+                a(
+                  class="btn btn-warning btn-sm ml-1"
+                  href=`/${prefixAdmin}/vouchers/edit/${item.id}`
+                ) Sửa
+                button(
+                  class="btn btn-danger btn-sm ml-1"
+                  button-delete
+                  data-id=item.id
+                ) Xóa
+
+  form(
+    action=""
+    method="POST"
+    id="form-delete-item"
+    data-path=`/${prefixAdmin}/vouchers/delete`
+  ) 
+
+  form(
+    action=""
+    method="POST"
+    id="form-change-status"
+    data-path=`/${prefixAdmin}/vouchers/change-status`
+  ) 

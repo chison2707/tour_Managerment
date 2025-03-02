@@ -10,6 +10,7 @@ import { accountRoutes } from "./acccount.route"
 import { roleRoutes } from "./role.route"
 import { authRoutes } from "./auth.route"
 import { userRoutes } from "./user.route"
+import { voucherRoutes } from "./voucher.route"
 import * as authController from "../../controllers/admin/auth.controller"
 
 const adminRoutes = (app: Express): void => {
@@ -26,6 +27,7 @@ const adminRoutes = (app: Express): void => {
     app.use(`${PATH_ADMIN}/accounts`, authMiddleware.requireAuth, accountRoutes);
     app.use(`${PATH_ADMIN}/roles`, authMiddleware.requireAuth, roleRoutes);
     app.use(`${PATH_ADMIN}/users`, authMiddleware.requireAuth, userRoutes);
+    app.use(`${PATH_ADMIN}/vouchers`, authMiddleware.requireAuth, voucherRoutes);
 
 };
 
