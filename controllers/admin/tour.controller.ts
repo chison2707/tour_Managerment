@@ -201,3 +201,36 @@ export const deleteTour = async (req: Request, res: Response) => {
         res.redirect(`/${systemConfig.prefixAdmin}/tours`);
     }
 };
+
+// [GET]/admin/detail/:id
+export const detail = async (req: Request, res: Response) => {
+    const id = req.params.id;
+
+    const tour = await Tour.findOne({
+        where: {
+            id: id,
+            deleted: false,
+        },
+        raw: true
+    });
+    if (tour["images"]) {
+        const images = JSON.parse(tour["images"]);
+        tour["image"] = images[0];
+    }
+    const tourCategory = await TourCategory.findOne({
+        where: {
+            tour_id: tour["id"]
+        },
+    });
+    const category = await Category.findOne({
+        where: {
+            id: tourCategory["category_id"]
+        },
+        raw: true
+    })
+    res.render("admin/pages/tours/detail", {
+        pageTitle: "Danh sách tour",
+        tour: tour,
+        category: category
+    });
+};
