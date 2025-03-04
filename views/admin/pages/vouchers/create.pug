@@ -1,0 +1,75 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+  +alert-success(3000)
+  +alert-error(3000)
+  h1(class="mb-4") #{pageTitle}
+
+  form(
+      action=`/${prefixAdmin}/vouchers/create`
+      method="POST"
+    )
+      div(class="form-group")
+        label(for="code") Mã voucher
+        input(
+          type="text"
+          class="form-control"
+          id="code"
+          name="code"
+          required
+        )
+      div(class="form-group")
+        label(for="quantity") Số lượng
+        input(
+          type="number"
+          class="form-control"
+          id="quantity"
+          name="quantity"
+          value="0"
+          min="0"
+        )
+      div(class="form-group")
+        label(for="discount") % Giảm giá
+        input(
+          type="number"
+          class="form-control"
+          id="discount"
+          name="discount"
+          value="0"
+          min="0"
+        )
+      div(class="form-group")
+        label(for="expiredAt") Hạn sử dụng
+        input(
+          type="datetime-local"
+          class="form-control"
+          id="expiredAt"
+          name="expiredAt"
+          value="0"
+          min="0"
+        )
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusActive"
+          name="status"
+          value="active"
+          checked
+        )
+        label(for="statusActive" class="form-check-label") Hoạt động
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusInActive"
+          name="status"
+          value="inactive"
+        )
+        label(for="statusInActive" class="form-check-label") Dừng hoạt động
+      div(class="form-group")
+        button(
+          type="submit"
+          class="btn btn-primary"
+        ) Tạo mới
