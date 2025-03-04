@@ -1,4 +1,4 @@
-import { Request, response, Response } from "express";
+import { Request, Response } from "express";
 import Voucher from "../../models/voucher.model";
 
 // [GET]/admin/vouchers
@@ -36,6 +36,26 @@ export const createPost = async (req: Request, res: Response) => {
             expiredAt: new Date(req.body.expiredAt),
         });
         req.flash('success', 'Tạo voucher thành công');
+        res.redirect('/admin/vouchers');
+    }
+};
+
+// [GET]/admin/vouchers/change-status/:status/:id
+export const changeStatus = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id;
+        const status = req.params.status;
+        await Voucher.update({
+            status: status
+        }, {
+            where: {
+                id: id
+            }
+        });
+        req.flash('success', 'Cập nhật trạng thái voucher thành công!');
+        res.redirect('/admin/vouchers');
+    } catch (error) {
+        req.flash('error', 'Cập nhật trạng thái voucher thất bại!');
         res.redirect('/admin/vouchers');
     }
 };
