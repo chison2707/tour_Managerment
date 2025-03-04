@@ -59,3 +59,16 @@ export const changeStatus = async (req: Request, res: Response) => {
         res.redirect('/admin/vouchers');
     }
 };
+// [GET]/admin/vouchers/edit/:id
+export const edit = async (req: Request, res: Response) => {
+    const voucher = await Voucher.findOne({
+        where: {
+            id: req.params.id
+        },
+        raw: true
+    });
+    res.render("admin/pages/vouchers/edit", {
+        pageTitle: "Sửa voucher",
+        voucher: voucher
+    });
+};
