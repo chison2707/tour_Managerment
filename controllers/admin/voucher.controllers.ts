@@ -9,7 +9,6 @@ export const index = async (req: Request, res: Response) => {
         },
         raw: true
     });
-
     res.render("admin/pages/vouchers/index", {
         pageTitle: "Danh sách voucher",
         vouchers: vouchers
