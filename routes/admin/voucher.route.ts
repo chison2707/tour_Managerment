@@ -9,5 +9,6 @@ router.post("/create", controller.createPost);
 router.patch("/change-status/:status/:id", controller.changeStatus);
 router.get("/edit/:id", controller.edit);
 router.patch("/edit/:id", controller.editPatch);
+router.delete("/delete/:id", controller.deleteVoucher);
 
 export const voucherRoutes: Router = router;

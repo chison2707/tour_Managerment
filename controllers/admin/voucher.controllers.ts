@@ -108,3 +108,21 @@ export const editPatch = async (req: Request, res: Response) => {
         res.redirect('/admin/vouchers');
     }
 };
+
+// [DELETE]/admin/vouchers/delete/:id
+export const deleteVoucher = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id;
+        await Voucher.destroy({
+            where: {
+                id: id
+            }
+        });
+
+        req.flash('success', 'Cập nhật voucher thành công!');
+        res.redirect('/admin/vouchers');
+    } catch (error) {
+        req.flash('error', 'có lỗi');
+        res.redirect('/admin/vouchers');
+    }
+};
