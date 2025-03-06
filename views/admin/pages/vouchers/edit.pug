@@ -8,7 +8,7 @@ block main
   h1(class="mb-4") #{pageTitle}
 
   form(
-      action=`/${prefixAdmin}/vouchers/create`
+      action=`/${prefixAdmin}/vouchers/edit/${voucher.id}?_method=PATCH`
       method="POST"
     )
       div(class="form-group")
@@ -58,7 +58,7 @@ block main
           id="statusActive"
           name="status"
           value="active"
-          checked
+          checked=(voucher.status == "active" ? true: false)
         )
         label(for="statusActive" class="form-check-label") Hoạt động
       div(class="form-group form-check form-check-inline")
@@ -68,10 +68,11 @@ block main
           id="statusInActive"
           name="status"
           value="inactive"
+          checked=(voucher.status == "inactive" ? true: false)
         )
         label(for="statusInActive" class="form-check-label") Dừng hoạt động
       div(class="form-group")
         button(
           type="submit"
           class="btn btn-primary"
-        ) Tạo mới
+        ) Cập nhật

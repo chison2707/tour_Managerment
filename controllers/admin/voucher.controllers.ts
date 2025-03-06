@@ -72,3 +72,39 @@ export const edit = async (req: Request, res: Response) => {
         voucher: voucher
     });
 };
+// [PATCH]/admin/vouchers/edit/:id
+export const editPatch = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id;
+        const voucherOld = await Voucher.findOne({
+            where: {
+                id: id
+            },
+            raw: true
+        });
+        const timeOld = new Date(voucherOld["expiredAt"]);
+        const timeNew = new Date(req.body.expiredAt);
+        if (timeNew >= timeOld) {
+            await Voucher.update({
+                code: req.body.code,
+                quantity: req.body.quantity,
+                discount: req.body.discount,
+                expiredAt: timeNew,
+                status: req.body.status
+            }, {
+                where: {
+                    id: id
+                }
+            });
+        } else {
+            req.flash('error', 'Ngày hết hạn phải lớn hơn hoặc bằng ngày hết hạn cũ');
+            return res.redirect('back');
+        }
+
+        req.flash('success', 'Cập nhật voucher thành công!');
+        res.redirect('/admin/vouchers');
+    } catch (error) {
+        req.flash('error', 'có lỗi');
+        res.redirect('/admin/vouchers');
+    }
+};

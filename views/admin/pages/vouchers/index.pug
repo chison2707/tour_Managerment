@@ -38,7 +38,7 @@ block main
               td #{item.discount}
               td #{item.quantity}
               td 
-                +formatDateTime(item.expiredA)
+                +formatDateTime(item.expiredAt)
               td
                 if (item.status === "active")
                   a(
