@@ -40,25 +40,6 @@ export const createPost = async (req: Request, res: Response) => {
     }
 };
 
-// [GET]/admin/vouchers/change-status/:status/:id
-export const changeStatus = async (req: Request, res: Response) => {
-    try {
-        const id = req.params.id;
-        const status = req.params.status;
-        await Voucher.update({
-            status: status
-        }, {
-            where: {
-                id: id
-            }
-        });
-        req.flash('success', 'Cập nhật trạng thái voucher thành công!');
-        res.redirect('/admin/vouchers');
-    } catch (error) {
-        req.flash('error', 'Cập nhật trạng thái voucher thất bại!');
-        res.redirect('/admin/vouchers');
-    }
-};
 // [GET]/admin/vouchers/edit/:id
 export const edit = async (req: Request, res: Response) => {
     const voucher = await Voucher.findOne({
@@ -89,8 +70,7 @@ export const editPatch = async (req: Request, res: Response) => {
                 code: req.body.code,
                 quantity: req.body.quantity,
                 discount: req.body.discount,
-                expiredAt: timeNew,
-                status: req.body.status
+                expiredAt: timeNew
             }, {
                 where: {
                     id: id

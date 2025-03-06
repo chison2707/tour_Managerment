@@ -9,7 +9,6 @@ block main
     .card-body
       .row
         .col-8
-          
         .col-4.text-right
           a(
             href=`/${prefixAdmin}/vouchers/create`
@@ -40,22 +39,14 @@ block main
               td 
                 +formatDateTime(item.expiredAt)
               td
-                if (item.status === "active")
+                if(new Date() > new Date(item.expiredAt))
                   a(
-                    href="javascript:;"
-                    data-status=item.status
-                    data-id = item.id 
-                    button-change-status
-                    class="badge badge-success"
-                  ) Hoạt động
+                    class="badge badge-danger"
+                  ) Đã hết hạn
                 else
                   a(
-                    href="javascript:;"
-                    data-status=item.status
-                    data-id = item.id 
-                    button-change-status
-                    class="badge badge-danger"
-                  ) Kết thúc
+                    class="badge badge-success"
+                  ) Còn thời hạn
               td
                 a(
                   class="btn btn-warning btn-sm ml-1"
@@ -72,11 +63,4 @@ block main
     method="POST"
     id="form-delete-item"
     data-path=`/${prefixAdmin}/vouchers/delete`
-  ) 
-
-  form(
-    action=""
-    method="POST"
-    id="form-change-status"
-    data-path=`/${prefixAdmin}/vouchers/change-status`
   ) 

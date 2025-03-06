@@ -51,26 +51,6 @@ block main
           value= moment(voucher.expiredAt).format('YYYY-MM-DDTHH:mm')
           min="0"
         )
-      div(class="form-group form-check form-check-inline")
-        input(
-          type="radio"
-          class="form-check-input"
-          id="statusActive"
-          name="status"
-          value="active"
-          checked=(voucher.status == "active" ? true: false)
-        )
-        label(for="statusActive" class="form-check-label") Hoạt động
-      div(class="form-group form-check form-check-inline")
-        input(
-          type="radio"
-          class="form-check-input"
-          id="statusInActive"
-          name="status"
-          value="inactive"
-          checked=(voucher.status == "inactive" ? true: false)
-        )
-        label(for="statusInActive" class="form-check-label") Dừng hoạt động
       div(class="form-group")
         button(
           type="submit"

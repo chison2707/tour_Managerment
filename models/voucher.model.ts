@@ -24,9 +24,6 @@ const Voucher = sequelize.define("Voucher", {
         type: DataTypes.DATE,
         allowNull: false,
     },
-    status: {
-        type: DataTypes.STRING(20),
-    },
     deleted: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
