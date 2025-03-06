@@ -2,6 +2,7 @@ import { Express } from "express";
 import { systemConfig } from "../../config/system";
 import * as authMiddleware from "../../middlewares/admin/auth.middleware";
 
+import { dashboardRoutes } from "./dashboard.route"
 import { categoryRoutes } from "./category.route";
 import { tourRoutes } from "./tour.route";
 import { orderRoutes } from "./order.route";
@@ -20,6 +21,7 @@ const adminRoutes = (app: Express): void => {
     app.get(PATH_ADMIN, authController.login);
 
     app.use(`${PATH_ADMIN}/auth`, authRoutes);
+    app.use(`${PATH_ADMIN}/dashboard`, authMiddleware.requireAuth, dashboardRoutes);
     app.use(`${PATH_ADMIN}/categories`, authMiddleware.requireAuth, categoryRoutes);
     app.use(`${PATH_ADMIN}/tours`, authMiddleware.requireAuth, tourRoutes);
     app.use(`${PATH_ADMIN}/upload`, authMiddleware.requireAuth, uploadRoutes);
