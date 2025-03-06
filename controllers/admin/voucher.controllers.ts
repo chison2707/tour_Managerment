@@ -29,10 +29,11 @@ export const createPost = async (req: Request, res: Response) => {
         req.flash('error', 'Ngày hết hạn phải lớn hơn ngày hiện tại');
         return res.redirect('back');
     } else {
-        const voucher = await Voucher.create({
+        console.log(req.body);
+        await Voucher.create({
             code: req.body.code,
-            quantity: req.body.quantity,
-            discount: req.body.discount,
+            quantity: parseInt(req.body.quantity),
+            discount: parseInt(req.body.discount),
             expiredAt: new Date(req.body.expiredAt),
         });
         req.flash('success', 'Tạo voucher thành công');
