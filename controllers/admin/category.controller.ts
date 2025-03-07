@@ -4,18 +4,24 @@ import { systemConfig } from "../../config/system";
 
 // [GET] /admin/categories
 export const index = async (req: Request, res: Response) => {
+    const permissions = res.locals.role.permissions;
 
-    const categories = await Category.findAll({
-        where: {
-            deleted: false,
-        },
-        raw: true
-    });
+    if (!permissions.includes("category_view")) {
+        res.status(403).send("Bạn không có quyền xem đơn hàng");
+        return;
+    } else {
+        const categories = await Category.findAll({
+            where: {
+                deleted: false,
+            },
+            raw: true
+        });
 
-    res.render("admin/pages/category/index", {
-        pageTitle: "Danh mục tour",
-        categories: categories
-    });
+        res.render("admin/pages/category/index", {
+            pageTitle: "Danh mục tour",
+            categories: categories
+        });
+    }
 };
 
 // [GET] /admin/categories

@@ -1,37 +1,38 @@
 extends ../../layouts/default.pug
 
 block main
-  .container.mt-5
-    .card
-      .card-header.bg-primary.text-white.text-center
-        h2 Chi tiết tour
-      .card-body
-        h4.card-title
-          | Tên Tour: 
-          span#tourTitle #{tour.title}
-        p.card-text
-          | Mã tour:
-          strong#tourCode #{tour.code}
-        p.card-text
-          | Giá: 
-          strong#tourPrice #{tour.price.toLocaleString()}đ
-        p.card-text
-          | Giảm giá: 
-          strong#tourDiscount #{tour.discount}%
-        p.card-text
-          | Số lượng: 
-          strong#tourStock #{tour.stock}
-        p.card-text
-          | Trạng thái: 
-          strong#tourStatus #{tour.status}
-        div
-          h5 Thông tin
-          p#tourInformation !{tour.information}
-        div
-          h5 Lịch trình:
-          p#tourSchedule !{tour.schedule}
-        .mt-3
-          h5 Hình ảnh
-          img#tourImages.img-fluid.rounded(src=tour.image alt=tour.title)
-      .card-footer.text-center
-        a.btn.btn-secondary(href="/admin/tours") Quay lại
+  if(role.permissions.includes("tour_view"))
+    .container.mt-5
+      .card
+        .card-header.bg-primary.text-white.text-center
+          h2 Chi tiết tour
+        .card-body
+          h4.card-title
+            | Tên Tour: 
+            span#tourTitle #{tour.title}
+          p.card-text
+            | Mã tour:
+            strong#tourCode #{tour.code}
+          p.card-text
+            | Giá: 
+            strong#tourPrice #{tour.price.toLocaleString()}đ
+          p.card-text
+            | Giảm giá: 
+            strong#tourDiscount #{tour.discount}%
+          p.card-text
+            | Số lượng: 
+            strong#tourStock #{tour.stock}
+          p.card-text
+            | Trạng thái: 
+            strong#tourStatus #{tour.status}
+          div
+            h5 Thông tin
+            p#tourInformation !{tour.information}
+          div
+            h5 Lịch trình:
+            p#tourSchedule !{tour.schedule}
+          .mt-3
+            h5 Hình ảnh
+            img#tourImages.img-fluid.rounded(src=tour.image alt=tour.title)
+        .card-footer.text-center
+          a.btn.btn-secondary(href="/admin/tours") Quay lại

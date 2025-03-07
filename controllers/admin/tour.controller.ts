@@ -7,25 +7,32 @@ import TourCategory from "../../models/tour-category.model";
 
 // [GET]/admin/tours
 export const index = async (req: Request, res: Response) => {
-    const tours = await Tour.findAll({
-        where: {
-            deleted: false,
-        },
-        raw: true
-    });
+    const permissions = res.locals.role.permissions;
 
-    tours.forEach(item => {
-        if (item["images"]) {
-            const images = JSON.parse(item["images"]);
-            item["image"] = images[0];
-        }
-        item["price_special"] = (item["price"] * (1 - item["discount"] / 100));
-    });
+    if (!permissions.includes("tour_view")) {
+        res.status(403).send("Bạn không có quyền xem đơn hàng");
+        return;
+    } else {
+        const tours = await Tour.findAll({
+            where: {
+                deleted: false,
+            },
+            raw: true
+        });
 
-    res.render("admin/pages/tours/index", {
-        pageTitle: "Danh sách tour",
-        tours: tours
-    });
+        tours.forEach(item => {
+            if (item["images"]) {
+                const images = JSON.parse(item["images"]);
+                item["image"] = images[0];
+            }
+            item["price_special"] = (item["price"] * (1 - item["discount"] / 100));
+        });
+
+        res.render("admin/pages/tours/index", {
+            pageTitle: "Danh sách tour",
+            tours: tours
+        });
+    }
 };
 
 // [GET]/admin/tours/create

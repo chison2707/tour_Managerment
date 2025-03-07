@@ -76,7 +76,25 @@ block main
                     each item in records
                         td(class="text-center")
                             input(type="checkbox")
-
+                //- Đơn hàng
+                tr
+                    td(colspan="4")
+                        b Đơn hàng
+                tr(data-name="order_view")
+                    td Xem
+                    each item in records
+                        td(class="text-center")
+                            input(type="checkbox")
+                tr(data-name="order_edit")
+                    td Chỉnh sửa
+                    each item in records
+                        td(class="text-center")
+                            input(type="checkbox")
+                tr(data-name="order_delete")
+                    td Xóa
+                    each item in records
+                        td(class="text-center")
+                            input(type="checkbox")
                 //- Nhóm quyền
                 tr
                     td(colspan="4")
