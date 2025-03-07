@@ -23,6 +23,7 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
                 where: { id: user["role_id"] },
                 attributes: ["title", "permissions"]
             });
+            console.log(role["permissions"]);
 
             res.locals.user = user;
             res.locals.role = role;
