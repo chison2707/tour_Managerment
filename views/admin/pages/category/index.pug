@@ -10,10 +10,11 @@ block main
         .col-8
           
         .col-4.text-right
-          a(
-            href=`/${prefixAdmin}/categories/create`
-            class="btn btn-outline-success"
-          ) + Thêm mới
+          if(role.permissions.includes("category_create"))
+            a(
+              href=`/${prefixAdmin}/categories/create`
+              class="btn btn-outline-success"
+            ) + Thêm mới
 
 
       table(
@@ -40,36 +41,44 @@ block main
                 )
               td #{item.title}
               td
-                if (item.status === "active")
-                  a(
-                    href="javascript:;"
-                    data-status=item.status
-                    data-id = item.id 
-                    button-change-status
-                    class="badge badge-success"
-                  ) Hoạt động
+                if(role.permissions.includes("category_edit"))
+                  if (item.status === "active")
+                    a(
+                      href="javascript:;"
+                      data-status=item.status
+                      data-id = item.id 
+                      button-change-status
+                      class="badge badge-success"
+                    ) Hoạt động
+                  else
+                    a(
+                      href="javascript:;"
+                      data-status=item.status
+                      data-id = item.id 
+                      button-change-status
+                      class="badge badge-danger"
+                    ) Dừng hoạt động
                 else
-                  a(
-                    href="javascript:;"
-                    data-status=item.status
-                    data-id = item.id 
-                    button-change-status
-                    class="badge badge-danger"
-                  ) Dừng hoạt động
+                  if (item.status === "active")
+                    span(class="badge badge-success") Hoạt động
+                  else
+                    span(class="badge badge-danger") Dừng hoạt động
               td
                 a(
                   class="btn btn-secondary btn-sm"
                   href=`/${prefixAdmin}/categories/detail/${item.id}`
                 ) Chi tiết
-                a(
-                  class="btn btn-warning btn-sm ml-1"
-                  href=`/${prefixAdmin}/categories/edit/${item.id}`
-                ) Sửa
-                button(
-                  class="btn btn-danger btn-sm ml-1"
-                  button-delete
-                  data-id=item.id
-                ) Xóa
+                if(role.permissions.includes("category_edit"))
+                  a(
+                    class="btn btn-warning btn-sm ml-1"
+                    href=`/${prefixAdmin}/categories/edit/${item.id}`
+                  ) Sửa
+                if(role.permissions.includes("category_delete"))
+                  button(
+                    class="btn btn-danger btn-sm ml-1"
+                    button-delete
+                    data-id=item.id
+                  ) Xóa
 
   form(
     action=""

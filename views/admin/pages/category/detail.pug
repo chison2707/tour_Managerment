@@ -24,4 +24,5 @@ block main
                                     td #{category.status}
             .card-footer.text-center
                 a.btn.btn-secondary.mr-2(href='/admin/categories') Quay lại
-                a.btn.btn-warning(href=`/admin/categories/edit/${category.id}`) Chỉnh sửa
+                if(role.permissions.includes("category_edit"))
+                    a.btn.btn-warning(href=`/admin/categories/edit/${category.id}`) Chỉnh sửa

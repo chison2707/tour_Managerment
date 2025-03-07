@@ -3,8 +3,9 @@
     ul
       li
         a(href=`/${prefixAdmin}/dashboard`) Tổng quan
-      li
-        a(href=`/${prefixAdmin}/categories`) Quản lý danh mục
+      if(role.permissions.includes("category_view"))
+        li
+          a(href=`/${prefixAdmin}/categories`) Quản lý danh mục
       if(role.permissions.includes("tour_view"))
         li
           a(href=`/${prefixAdmin}/tours`) Quản lý tour
