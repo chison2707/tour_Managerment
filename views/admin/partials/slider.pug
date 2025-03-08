@@ -21,7 +21,8 @@
       if(role.permissions.includes("role_permissions"))
         li
           a(href=`/${prefixAdmin}/roles/permissions`) Phân quyền
-      li
-        a(href=`/${prefixAdmin}/accounts`) Tài khoản admin
+      if(role.permissions.includes("account_view"))
+        li
+          a(href=`/${prefixAdmin}/accounts`) Tài khoản admin
       li
         a(href=`/${prefixAdmin}/users`) Tài khoản user
