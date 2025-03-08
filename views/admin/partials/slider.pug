@@ -12,8 +12,9 @@
       if(role.permissions.includes("order_view"))
         li
           a(href=`/${prefixAdmin}/orders`) Quản lý đơn hàng
-      li
-        a(href=`/${prefixAdmin}/vouchers`) Quản lý voucher
+      if(role.permissions.includes("voucher_view"))
+        li
+          a(href=`/${prefixAdmin}/vouchers`) Quản lý voucher
       li
         a(href=`/${prefixAdmin}/roles`) Nhóm quyền
       li

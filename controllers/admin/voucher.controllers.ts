@@ -3,16 +3,23 @@ import Voucher from "../../models/voucher.model";
 
 // [GET]/admin/vouchers
 export const index = async (req: Request, res: Response) => {
-    const vouchers = await Voucher.findAll({
-        where: {
-            deleted: false,
-        },
-        raw: true
-    });
-    res.render("admin/pages/vouchers/index", {
-        pageTitle: "Danh sách voucher",
-        vouchers: vouchers
-    });
+    const permissions = res.locals.role.permissions;
+
+    if (!permissions.includes("voucher_view")) {
+        res.status(403).send("Bạn không có quyền xem quản lý voucher");
+        return;
+    } else {
+        const vouchers = await Voucher.findAll({
+            where: {
+                deleted: false,
+            },
+            raw: true
+        });
+        res.render("admin/pages/vouchers/index", {
+            pageTitle: "Danh sách voucher",
+            vouchers: vouchers
+        });
+    }
 };
 
 // [GET]/admin/vouchers/create
@@ -25,19 +32,30 @@ export const create = async (req: Request, res: Response) => {
 
 // [POST]/admin/vouchers/create
 export const createPost = async (req: Request, res: Response) => {
-    if (new Date(req.body.expiredAt).getTime() < Date.now()) {
-        req.flash('error', 'Ngày hết hạn phải lớn hơn ngày hiện tại');
-        return res.redirect('back');
+    const permissions = res.locals.role.permissions;
+
+    if (!permissions.includes("voucher_create")) {
+        res.status(403).send("Bạn không có quyền thêm mới voucher");
+        return;
     } else {
-        console.log(req.body);
-        await Voucher.create({
-            code: req.body.code,
-            quantity: parseInt(req.body.quantity),
-            discount: parseInt(req.body.discount),
-            expiredAt: new Date(req.body.expiredAt),
-        });
-        req.flash('success', 'Tạo voucher thành công');
-        res.redirect('/admin/vouchers');
+        try {
+            if (new Date(req.body.expiredAt).getTime() < Date.now()) {
+                req.flash('error', 'Ngày hết hạn phải lớn hơn ngày hiện tại');
+                return res.redirect('back');
+            } else {
+                await Voucher.create({
+                    code: req.body.code,
+                    quantity: parseInt(req.body.quantity),
+                    discount: parseInt(req.body.discount),
+                    expiredAt: new Date(req.body.expiredAt),
+                });
+                req.flash('success', 'Tạo voucher thành công');
+                res.redirect('/admin/vouchers');
+            }
+        } catch (error) {
+            req.flash('success', 'Có lỗi');
+            res.redirect('back');
+        }
     }
 };
 
@@ -56,54 +74,68 @@ export const edit = async (req: Request, res: Response) => {
 };
 // [PATCH]/admin/vouchers/edit/:id
 export const editPatch = async (req: Request, res: Response) => {
-    try {
-        const id = req.params.id;
-        const voucherOld = await Voucher.findOne({
-            where: {
-                id: id
-            },
-            raw: true
-        });
-        const timeOld = new Date(voucherOld["expiredAt"]);
-        const timeNew = new Date(req.body.expiredAt);
-        if (timeNew >= timeOld) {
-            await Voucher.update({
-                code: req.body.code,
-                quantity: req.body.quantity,
-                discount: req.body.discount,
-                expiredAt: timeNew
-            }, {
+    const permissions = res.locals.role.permissions;
+
+    if (!permissions.includes("voucher_edit")) {
+        res.status(403).send("Bạn không có quyền chỉnh sửa voucher");
+        return;
+    } else {
+        try {
+            const id = req.params.id;
+            const voucherOld = await Voucher.findOne({
                 where: {
                     id: id
-                }
+                },
+                raw: true
             });
-        } else {
-            req.flash('error', 'Ngày hết hạn phải lớn hơn hoặc bằng ngày hết hạn cũ');
-            return res.redirect('back');
-        }
+            const timeOld = new Date(voucherOld["expiredAt"]);
+            const timeNew = new Date(req.body.expiredAt);
+            if (timeNew >= timeOld) {
+                await Voucher.update({
+                    code: req.body.code,
+                    quantity: req.body.quantity,
+                    discount: req.body.discount,
+                    expiredAt: timeNew
+                }, {
+                    where: {
+                        id: id
+                    }
+                });
+            } else {
+                req.flash('error', 'Ngày hết hạn phải lớn hơn hoặc bằng ngày hết hạn cũ');
+                return res.redirect('back');
+            }
 
-        req.flash('success', 'Cập nhật voucher thành công!');
-        res.redirect('/admin/vouchers');
-    } catch (error) {
-        req.flash('error', 'có lỗi');
-        res.redirect('/admin/vouchers');
+            req.flash('success', 'Cập nhật voucher thành công!');
+            res.redirect('/admin/vouchers');
+        } catch (error) {
+            req.flash('error', 'có lỗi');
+            res.redirect('/admin/vouchers');
+        }
     }
 };
 
 // [DELETE]/admin/vouchers/delete/:id
 export const deleteVoucher = async (req: Request, res: Response) => {
-    try {
-        const id = req.params.id;
-        await Voucher.destroy({
-            where: {
-                id: id
-            }
-        });
+    const permissions = res.locals.role.permissions;
 
-        req.flash('success', 'Cập nhật voucher thành công!');
-        res.redirect('/admin/vouchers');
-    } catch (error) {
-        req.flash('error', 'có lỗi');
-        res.redirect('/admin/vouchers');
+    if (!permissions.includes("voucher_delete")) {
+        res.status(403).send("Bạn không có quyền xóa voucher");
+        return;
+    } else {
+        try {
+            const id = req.params.id;
+            await Voucher.destroy({
+                where: {
+                    id: id
+                }
+            });
+
+            req.flash('success', 'Cập nhật voucher thành công!');
+            res.redirect('/admin/vouchers');
+        } catch (error) {
+            req.flash('error', 'có lỗi');
+            res.redirect('/admin/vouchers');
+        }
     }
 };

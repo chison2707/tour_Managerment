@@ -5,61 +5,65 @@ include ../../mixins/alert.pug
 block main
   +alert-success(3000)
   +alert-error(3000)
-  h1(class="mb-4") #{pageTitle}
+  if(role.permissions.includes("voucher_view"))
+    h1(class="mb-4") #{pageTitle}
 
-  .card.mb-3
-    .card-header Danh sách
-    .card-body
-      .row
-        .col-8
-        .col-4.text-right
-          a(
-            href=`/${prefixAdmin}/vouchers/create`
-            class="btn btn-outline-success"
-          ) + Thêm mới
+    .card.mb-3
+      .card-header Danh sách
+      .card-body
+        .row
+          .col-8
+          .col-4.text-right
+            if(role.permissions.includes("voucher_create"))
+              a(
+                href=`/${prefixAdmin}/vouchers/create`
+                class="btn btn-outline-success"
+              ) + Thêm mới
 
 
-      table(
-        class="table table-hover table-sm mt-3"
-      )
-        thead
-          tr
-            th STT
-            th Mã voucher
-            th % Giảm giá
-            th Còn lại
-            th Thời gian hết hạn
-            th Trạng thái
-            th Hành động
+        table(
+          class="table table-hover table-sm mt-3"
+        )
+          thead
+            tr
+              th STT
+              th Mã voucher
+              th % Giảm giá
+              th Còn lại
+              th Thời gian hết hạn
+              th Trạng thái
+              th Hành động
 
-        tbody
-          each item, index in vouchers
-            tr 
-              td #{index+1}
-              td #{item.code}
-              td #{item.discount}
-              td #{item.quantity}
-              td 
-                +formatDateTime(item.expiredAt)
-              td
-                if(new Date() > new Date(item.expiredAt))
-                  a(
-                    class="badge badge-danger"
-                  ) Đã hết hạn
-                else
-                  a(
-                    class="badge badge-success"
-                  ) Còn thời hạn
-              td
-                a(
-                  class="btn btn-warning btn-sm ml-1"
-                  href=`/${prefixAdmin}/vouchers/edit/${item.id}`
-                ) Sửa
-                button(
-                  class="btn btn-danger btn-sm ml-1"
-                  button-delete
-                  data-id=item.id
-                ) Xóa
+          tbody
+            each item, index in vouchers
+              tr 
+                td #{index+1}
+                td #{item.code}
+                td #{item.discount}
+                td #{item.quantity}
+                td 
+                  +formatDateTime(item.expiredAt)
+                td
+                  if(new Date() > new Date(item.expiredAt))
+                    a(
+                      class="badge badge-danger"
+                    ) Đã hết hạn
+                  else
+                    a(
+                      class="badge badge-success"
+                    ) Còn thời hạn
+                td
+                  if(role.permissions.includes("voucher_edit"))
+                    a(
+                      class="btn btn-warning btn-sm ml-1"
+                      href=`/${prefixAdmin}/vouchers/edit/${item.id}`
+                    ) Sửa
+                  if(role.permissions.includes("voucher_delete"))
+                    button(
+                      class="btn btn-danger btn-sm ml-1"
+                      button-delete
+                      data-id=item.id
+                    ) Xóa
 
   form(
     action=""

@@ -95,6 +95,30 @@ block main
                     each item in records
                         td(class="text-center")
                             input(type="checkbox")
+                //- Voucher
+                tr
+                    td(colspan="4")
+                        b Voucher
+                tr(data-name="voucher_view")
+                    td Xem
+                    each item in records
+                        td(class="text-center")
+                            input(type="checkbox")
+                tr(data-name="voucher_create")
+                    td Thêm mới
+                    each item in records
+                        td(class="text-center")
+                            input(type="checkbox")
+                tr(data-name="voucher_edit")
+                    td Chỉnh sửa
+                    each item in records
+                        td(class="text-center")
+                            input(type="checkbox")
+                tr(data-name="voucher_delete")
+                    td Xóa
+                    each item in records
+                        td(class="text-center")
+                            input(type="checkbox")
                 //- Nhóm quyền
                 tr
                     td(colspan="4")
