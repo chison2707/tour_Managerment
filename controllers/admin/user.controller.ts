@@ -4,14 +4,21 @@ import { systemConfig } from "../../config/system";
 
 //[GET] / admin/users
 export const index = async (req: Request, res: Response) => {
-    const users = await User.findAll({
-        where: { deleted: false },
-        raw: true
-    });
-    res.render("admin/pages/users/index", {
-        pageTitle: "Danh sách tài khoản user",
-        users: users
-    });
+    const permissions = res.locals.role.permissions;
+
+    if (!permissions.includes("user_view")) {
+        res.status(403).send("Bạn không có quyền xem quản lý tài khoản user");
+        return;
+    } else {
+        const users = await User.findAll({
+            where: { deleted: false },
+            raw: true
+        });
+        res.render("admin/pages/users/index", {
+            pageTitle: "Danh sách tài khoản user",
+            users: users
+        });
+    }
 }
 
 //[GET] / admin/users/detail/:id
