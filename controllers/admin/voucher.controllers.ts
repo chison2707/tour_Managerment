@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import Voucher from "../../models/voucher.model";
 import paginationHelper from "../../helpers/pagination";
+import searchHelper from "../../helpers/search";
+import { Op } from "sequelize";
 
 // [GET]/admin/vouchers
 export const index = async (req: Request, res: Response) => {
@@ -11,6 +13,15 @@ export const index = async (req: Request, res: Response) => {
         return;
     } else {
         let find = { deleted: false };
+
+        // search
+        const objSearch = searchHelper(req.query);
+        if (objSearch.keyword) {
+            find["code"] = {
+                [Op.like]: `%${objSearch.keyword}%`
+            };
+        }
+
         // pagination
         const countVouchers = await Voucher.count({ where: find });
         let objPagination = paginationHelper(
@@ -31,6 +42,7 @@ export const index = async (req: Request, res: Response) => {
         res.render("admin/pages/vouchers/index", {
             pageTitle: "Danh sách voucher",
             vouchers: vouchers,
+            keyword: objSearch.keyword,
             pagination: objPagination
         });
     }
