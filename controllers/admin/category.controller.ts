@@ -1,6 +1,7 @@
 import { Request, Response } from "express-serve-static-core";
 import Category from "../../models/category.model";
 import { systemConfig } from "../../config/system";
+import paginationHelper from "../../helpers/pagination";
 
 // [GET] /admin/categories
 export const index = async (req: Request, res: Response) => {
@@ -10,16 +11,29 @@ export const index = async (req: Request, res: Response) => {
         res.status(403).send("Bạn không có quyền xem đơn hàng");
         return;
     } else {
-        const categories = await Category.findAll({
-            where: {
-                deleted: false,
+        let find = { deleted: false };
+        // pagination
+        const countProducts = await Category.count({ where: find });
+        let objPagination = paginationHelper(
+            {
+                currentPage: 1,
+                limitItems: 5
             },
+            req.query,
+            countProducts
+        );
+        // end pagination
+        const categories = await Category.findAll({
+            where: find,
+            limit: objPagination.limitItems,
+            offset: objPagination.skip,
             raw: true
         });
 
         res.render("admin/pages/category/index", {
             pageTitle: "Danh mục tour",
-            categories: categories
+            categories: categories,
+            pagination: objPagination
         });
     }
 };
