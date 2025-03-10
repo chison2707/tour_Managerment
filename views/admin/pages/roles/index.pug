@@ -1,6 +1,7 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 include ../../mixins/pagination.pug
+include ../../mixins/search.pug
 
 block main
     +alert-success(3000)
@@ -13,6 +14,7 @@ block main
             .card-body
                 .row 
                     .col-8
+                        +search(keyword)
                     .col-4.text-right
                         if(role.permissions.includes("role_create"))
                             a(

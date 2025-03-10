@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import Role from "../../models/role.model";
 import { systemConfig } from "../../config/system";
 import paginationHelper from "../../helpers/pagination";
+import searchHelper from "../../helpers/search";
+import { Op } from "sequelize";
 
 //[GET] / admin/roles
 export const index = async (req: Request, res: Response) => {
@@ -12,6 +14,15 @@ export const index = async (req: Request, res: Response) => {
         return;
     } else {
         let find = { deleted: false };
+
+        // search
+        const objSearch = searchHelper(req.query);
+        if (objSearch.keyword) {
+            find["title"] = {
+                [Op.like]: `%${objSearch.keyword}%`
+            };
+        }
+
         // pagination
         const countRoles = await Role.count({ where: find });
         let objPagination = paginationHelper(
@@ -33,6 +44,7 @@ export const index = async (req: Request, res: Response) => {
         res.render("admin/pages/roles/index", {
             pageTitle: "Danh sách nhóm quyền",
             records: records,
+            keyword: objSearch.keyword,
             pagination: objPagination
         });
     }
