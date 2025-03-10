@@ -1,5 +1,6 @@
 extends ../../layouts/default.pug
 include ../../mixins/pagination.pug
+include ../../mixins/search.pug
 
 block main
   if(role.permissions.includes("category_view"))
@@ -10,7 +11,7 @@ block main
       .card-body
         .row
           .col-8
-            
+            +search(keyword)  
           .col-4.text-right
             if(role.permissions.includes("category_create"))
               a(
