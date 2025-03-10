@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import User from "../../models/user.model";
 import { systemConfig } from "../../config/system";
+import paginationHelper from "../../helpers/pagination";
 
 //[GET] / admin/users
 export const index = async (req: Request, res: Response) => {
@@ -10,13 +11,28 @@ export const index = async (req: Request, res: Response) => {
         res.status(403).send("Bạn không có quyền xem quản lý tài khoản user");
         return;
     } else {
+        let find = { deleted: false };
+        // pagination
+        const countUsers = await User.count({ where: find });
+        let objPagination = paginationHelper(
+            {
+                currentPage: 1,
+                limitItems: 5
+            },
+            req.query,
+            countUsers
+        );
+        // end pagination
         const users = await User.findAll({
-            where: { deleted: false },
+            where: find,
+            limit: objPagination.limitItems,
+            offset: objPagination.skip,
             raw: true
         });
         res.render("admin/pages/users/index", {
             pageTitle: "Danh sách tài khoản user",
-            users: users
+            users: users,
+            pagination: objPagination
         });
     }
 }
