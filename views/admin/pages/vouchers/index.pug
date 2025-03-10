@@ -1,6 +1,7 @@
 extends ../../layouts/default.pug
 include ../../mixins/moment.pug
 include ../../mixins/alert.pug
+include ../../mixins/pagination.pug
 
 block main
   +alert-success(3000)
@@ -64,6 +65,7 @@ block main
                       button-delete
                       data-id=item.id
                     ) Xóa
+    +pagination(pagination)
 
   form(
     action=""

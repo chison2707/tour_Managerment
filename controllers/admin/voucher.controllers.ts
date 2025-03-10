@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Voucher from "../../models/voucher.model";
+import paginationHelper from "../../helpers/pagination";
 
 // [GET]/admin/vouchers
 export const index = async (req: Request, res: Response) => {
@@ -9,15 +10,28 @@ export const index = async (req: Request, res: Response) => {
         res.status(403).send("Bạn không có quyền xem quản lý voucher");
         return;
     } else {
-        const vouchers = await Voucher.findAll({
-            where: {
-                deleted: false,
+        let find = { deleted: false };
+        // pagination
+        const countVouchers = await Voucher.count({ where: find });
+        let objPagination = paginationHelper(
+            {
+                currentPage: 1,
+                limitItems: 5
             },
+            req.query,
+            countVouchers
+        );
+        // end pagination
+        const vouchers = await Voucher.findAll({
+            where: find,
+            limit: objPagination.limitItems,
+            offset: objPagination.skip,
             raw: true
         });
         res.render("admin/pages/vouchers/index", {
             pageTitle: "Danh sách voucher",
-            vouchers: vouchers
+            vouchers: vouchers,
+            pagination: objPagination
         });
     }
 };
