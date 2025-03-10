@@ -4,6 +4,7 @@ import Category from "../../models/category.model";
 import { generateTourCode } from "../../helpers/generate";
 import { systemConfig } from "../../config/system";
 import TourCategory from "../../models/tour-category.model";
+import paginationHelper from "../../helpers/pagination";
 
 // [GET]/admin/tours
 export const index = async (req: Request, res: Response) => {
@@ -13,10 +14,22 @@ export const index = async (req: Request, res: Response) => {
         res.status(403).send("Bạn không có quyền xem đơn hàng");
         return;
     } else {
-        const tours = await Tour.findAll({
-            where: {
-                deleted: false,
+        let find = { deleted: false };
+        // pagination
+        const countTours = await Tour.count({ where: find });
+        let objPagination = paginationHelper(
+            {
+                currentPage: 1,
+                limitItems: 5
             },
+            req.query,
+            countTours
+        );
+        // end pagination
+        const tours = await Tour.findAll({
+            where: find,
+            limit: objPagination.limitItems,
+            offset: objPagination.skip,
             raw: true
         });
 
@@ -30,7 +43,8 @@ export const index = async (req: Request, res: Response) => {
 
         res.render("admin/pages/tours/index", {
             pageTitle: "Danh sách tour",
-            tours: tours
+            tours: tours,
+            pagination: objPagination
         });
     }
 };
