@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Role from "../../models/role.model";
 import { systemConfig } from "../../config/system";
+import paginationHelper from "../../helpers/pagination";
 
 //[GET] / admin/roles
 export const index = async (req: Request, res: Response) => {
@@ -10,14 +11,29 @@ export const index = async (req: Request, res: Response) => {
         res.status(403).send("Bạn không có quyền xem nhóm quyền");
         return;
     } else {
+        let find = { deleted: false };
+        // pagination
+        const countRoles = await Role.count({ where: find });
+        let objPagination = paginationHelper(
+            {
+                currentPage: 1,
+                limitItems: 5
+            },
+            req.query,
+            countRoles
+        );
+        // end pagination
         const records = await Role.findAll({
-            where: { deleted: false },
+            where: find,
+            limit: objPagination.limitItems,
+            offset: objPagination.skip,
             raw: true
         })
 
         res.render("admin/pages/roles/index", {
             pageTitle: "Danh sách nhóm quyền",
             records: records,
+            pagination: objPagination
         });
     }
 }

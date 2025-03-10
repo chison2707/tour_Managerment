@@ -13,14 +13,14 @@ export const index = async (req: Request, res: Response) => {
     } else {
         let find = { deleted: false };
         // pagination
-        const countProducts = await Category.count({ where: find });
+        const countCategories = await Category.count({ where: find });
         let objPagination = paginationHelper(
             {
                 currentPage: 1,
                 limitItems: 5
             },
             req.query,
-            countProducts
+            countCategories
         );
         // end pagination
         const categories = await Category.findAll({

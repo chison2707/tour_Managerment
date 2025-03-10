@@ -17,14 +17,14 @@ export const index = async (req: Request, res: Response) => {
         return;
     } else {
         // pagination
-        const countProducts = await adminAccount.count();
+        const countAccounts = await adminAccount.count();
         let objPagination = paginationHelper(
             {
                 currentPage: 1,
                 limitItems: 5
             },
             req.query,
-            countProducts
+            countAccounts
         );
         // end pagination
 
