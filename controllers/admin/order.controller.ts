@@ -5,6 +5,7 @@ import OrderItem from "../../models/order-item.model";
 import sequelize from "../../config/database";
 import { QueryTypes, where } from "sequelize";
 import Tour from "../../models/tour.model";
+import paginationHelper from "../../helpers/pagination";
 
 // [GET] /admin/orders
 export const index = async (req: Request, res: Response) => {
@@ -14,6 +15,18 @@ export const index = async (req: Request, res: Response) => {
         res.status(403).send("Bạn không có quyền xem đơn hàng");
         return;
     } else {
+        let find = { deleted: false };
+        // pagination
+        const countOrders = await Order.count({ where: find });
+        let objPagination = paginationHelper(
+            {
+                currentPage: 1,
+                limitItems: 5
+            },
+            req.query,
+            countOrders
+        );
+        // end pagination
         const orders = await sequelize.query(`
             SELECT 
               orders.id,
@@ -30,15 +43,22 @@ export const index = async (req: Request, res: Response) => {
           JOIN orders_item ON orders.id = orders_item.orderId
           JOIN tours ON orders_item.tourId = tours.id
           WHERE orders.deleted = :deleted
-          GROUP BY orders.id, orders.code, orders.fullName, orders.phone,orders.status;
+          GROUP BY orders.id, orders.code, orders.fullName, orders.phone,orders.status
+          LIMIT :limitItems
+          OFFSET :skip;
           `, {
             type: QueryTypes.SELECT,
-            replacements: { deleted: false }
+            replacements: {
+                deleted: false,
+                limitItems: objPagination.limitItems,
+                skip: objPagination.skip
+            }
         });
 
         res.render("admin/pages/order/index", {
             pageTitle: "Danh sách đơn hàng",
-            orders: orders
+            orders: orders,
+            pagination: objPagination
         });
     }
 };
