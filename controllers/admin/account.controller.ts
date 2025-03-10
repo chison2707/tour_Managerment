@@ -6,6 +6,7 @@ import Role from "../../models/role.model";
 import { systemConfig } from "../../config/system";
 import { generateRandomString } from "../../helpers/generate";
 import { Op } from "sequelize";
+import paginationHelper from "../../helpers/pagination";
 
 //[GET] / admin/accounts
 export const index = async (req: Request, res: Response) => {
@@ -15,7 +16,23 @@ export const index = async (req: Request, res: Response) => {
         res.status(403).send("Bạn không có quyền xem tài khoản admin");
         return;
     } else {
-        const accounts = await adminAccount.findAll();
+        // pagination
+        const countProducts = await adminAccount.count();
+        let objPagination = paginationHelper(
+            {
+                currentPage: 1,
+                limitItems: 5
+            },
+            req.query,
+            countProducts
+        );
+        // end pagination
+
+        // const accounts = await adminAccount.findAll();
+        const accounts = await adminAccount.findAll({
+            limit: objPagination.limitItems,
+            offset: objPagination.skip
+        });
         for (const record of accounts) {
             const role = await Role.findOne({
                 where: {
@@ -28,7 +45,8 @@ export const index = async (req: Request, res: Response) => {
 
         res.render("admin/pages/accounts/index", {
             pageTitle: "Danh sách tài khoản admin",
-            accounts: accounts
+            accounts: accounts,
+            pagination: objPagination
         });
     }
 }
