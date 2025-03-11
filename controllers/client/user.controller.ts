@@ -225,3 +225,36 @@ export const edit = async (req: Request, res: Response) => {
         user: user
     });
 }
+
+// [PATCH]/users/edit
+export const editPatch = async (req: Request, res: Response) => {
+    try {
+        if (req.body.password) {
+            await User.update({
+                fullName: req.body.fullname,
+                email: req.body.email,
+                phone: req.body.phone,
+                password: md5(req.body.password)
+            }, {
+                where: {
+                    tokenUser: req.cookies.tokenUser
+                }
+            })
+        } else {
+            await User.update({
+                fullName: req.body.fullname,
+                email: req.body.email,
+                phone: req.body.phone
+            }, {
+                where: {
+                    tokenUser: req.cookies.tokenUser
+                }
+            })
+        }
+        req.flash("success", "Cập nhật thông tin thành công!");
+        res.redirect("back");
+    } catch (error) {
+        req.flash("error", "Cập nhật thông tin thất bại!");
+        res.redirect("back");
+    }
+}
