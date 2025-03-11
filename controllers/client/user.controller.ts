@@ -19,6 +19,7 @@ export const index = async (req: Request, res: Response) => {
         user: user
     });
 }
+
 // [GET]/users/login
 export const login = async (req: Request, res: Response) => {
     res.render("client/pages/user/login", {
@@ -208,4 +209,19 @@ export const resetPasswordPost = async (req: Request, res: Response) => {
 
     req.flash("success", "Đổi mật khẩu thành công!!!");
     res.redirect("/");
+}
+
+// [GET]/users/edit
+export const edit = async (req: Request, res: Response) => {
+    const user = await User.findOne({
+        where: {
+            tokenUser: req.cookies.tokenUser,
+            deleted: false
+        },
+        attributes: { exclude: ["password"] }
+    });
+    res.render("client/pages/user/edit", {
+        pageTitle: "Chỉnh sửa thông tin cá nhân",
+        user: user
+    });
 }

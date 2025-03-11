@@ -2,8 +2,10 @@ import { Router } from 'express';
 const router: Router = Router();
 import * as controller from "../../controllers/client/user.controller";
 import * as validate from "../../validates/client/user.validate";
+import { requireAuth } from "../../middlewares/client/auth.middleware";
 
-router.get('/', controller.index);
+router.get('/', requireAuth, controller.index);
+router.get('/edit', requireAuth, controller.edit);
 router.get('/login', controller.login);
 router.get('/register', controller.register);
 router.post('/register', validate.registerPost, controller.registerPost);
