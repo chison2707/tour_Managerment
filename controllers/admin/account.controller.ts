@@ -7,6 +7,7 @@ import { systemConfig } from "../../config/system";
 import { generateRandomString } from "../../helpers/generate";
 import { Op } from "sequelize";
 import paginationHelper from "../../helpers/pagination";
+import searchHelper from "../../helpers/search";
 
 //[GET] / admin/accounts
 export const index = async (req: Request, res: Response) => {
@@ -16,8 +17,17 @@ export const index = async (req: Request, res: Response) => {
         res.status(403).send("Bạn không có quyền xem tài khoản admin");
         return;
     } else {
+        let find = {};
+
+        // search
+        const objSearch = searchHelper(req.query);
+        if (objSearch.keyword) {
+            find["fullName"] = {
+                [Op.like]: `%${objSearch.keyword}%`
+            };
+        }
         // pagination
-        const countAccounts = await adminAccount.count();
+        const countAccounts = await adminAccount.count({ where: find });
         let objPagination = paginationHelper(
             {
                 currentPage: 1,
@@ -30,6 +40,7 @@ export const index = async (req: Request, res: Response) => {
 
         // const accounts = await adminAccount.findAll();
         const accounts = await adminAccount.findAll({
+            where: find,
             limit: objPagination.limitItems,
             offset: objPagination.skip
         });
@@ -46,6 +57,7 @@ export const index = async (req: Request, res: Response) => {
         res.render("admin/pages/accounts/index", {
             pageTitle: "Danh sách tài khoản admin",
             accounts: accounts,
+            keyword: objSearch.keyword,
             pagination: objPagination
         });
     }
