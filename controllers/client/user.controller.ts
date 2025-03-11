@@ -4,8 +4,21 @@ import User from "../../models/user.model";
 import * as generate from "../../helpers/generate";
 import { sendMail } from "../../helpers/sendmail";
 import ForgotPassword from "../../models/forgot-password.model";
-import { where } from "sequelize";
 
+// [GET]/users/
+export const index = async (req: Request, res: Response) => {
+    const user = await User.findOne({
+        where: {
+            tokenUser: req.cookies.tokenUser,
+            deleted: false
+        },
+        attributes: { exclude: ["password"] }
+    });
+    res.render("client/pages/user/infor", {
+        pageTitle: "Thông tin cá nhân",
+        user: user
+    });
+}
 // [GET]/users/login
 export const login = async (req: Request, res: Response) => {
     res.render("client/pages/user/login", {

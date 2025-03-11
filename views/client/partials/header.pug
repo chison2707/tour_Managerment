@@ -12,7 +12,7 @@ nav(class="navbar navbar-expand-lg bg-body-tertiary")
           a.nav-link(href='/cart') <i class="fa-solid fa-cart-shopping"></i> Giỏ hàng(<span mini-cart>0</span>)
         if(user)
           li.nav-item
-            a.nav-link(href='#') <i class="fa-solid fa-user"></i> #{user.fullName}
+            a.nav-link(href='/users') <i class="fa-solid fa-user"></i> #{user.fullName}
           li.nav-item
             a.nav-link(href='/users/logout') Đăng xuất
         else

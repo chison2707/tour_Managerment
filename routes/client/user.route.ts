@@ -3,6 +3,7 @@ const router: Router = Router();
 import * as controller from "../../controllers/client/user.controller";
 import * as validate from "../../validates/client/user.validate";
 
+router.get('/', controller.index);
 router.get('/login', controller.login);
 router.get('/register', controller.register);
 router.post('/register', validate.registerPost, controller.registerPost);
