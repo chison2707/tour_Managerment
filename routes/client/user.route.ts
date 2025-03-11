@@ -6,7 +6,7 @@ import { requireAuth } from "../../middlewares/client/auth.middleware";
 
 router.get('/', requireAuth, controller.index);
 router.get('/edit', requireAuth, controller.edit);
-router.patch('/edit', requireAuth, controller.editPatch);
+router.patch('/edit', validate.editUser, requireAuth, controller.editPatch);
 router.get('/login', controller.login);
 router.get('/register', controller.register);
 router.post('/register', validate.registerPost, controller.registerPost);

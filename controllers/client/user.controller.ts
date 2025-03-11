@@ -252,9 +252,9 @@ export const editPatch = async (req: Request, res: Response) => {
             })
         }
         req.flash("success", "Cập nhật thông tin thành công!");
-        res.redirect("back");
+        res.redirect("/users");
     } catch (error) {
         req.flash("error", "Cập nhật thông tin thất bại!");
-        res.redirect("back");
+        res.redirect("/users");
     }
 }
