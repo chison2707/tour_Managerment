@@ -1,0 +1,55 @@
+extends ../../layouts/default.pug
+
+block main
+    .row.mt-4
+        .col-12
+            .card.mb-4.border-0.shadow-sm
+                .card-header.bg-light.text-center
+                    h5.text-secondary Thông tin tài khoản
+                .card-body.text-center
+                    if user.avatar
+                        img(src=user.avatar, class="rounded-circle mb-3", style="height: 100px;")
+                    if user.fullName
+                        p.text-muted Họ tên: <b> #{user.fullName}</b>
+                    if user.email
+                        p.text-muted Email: <b> #{user.email}</b>
+                    if user.phone
+                        p.text-muted Số điện thoại: <b> #{user.phone}</b>
+                    if role.title
+                        p.text-muted Phân quyền: <b> #{role.title}</b>
+        
+        .col-lg-6.col-md-6.mb-4
+            .card.border-0.shadow-sm
+                .card-header.bg-light.text-secondary
+                    h5.m-0 Danh mục tour
+                .card-body
+                    p.text-muted Số lượng: <b> #{statistic.category.total}</b>
+                    p.text-muted Hoạt động: <b> #{statistic.category.active}</b>
+                    p.text-muted Dừng hoạt động: <b> #{statistic.category.inactive}</b>
+
+        .col-lg-6.col-md-6.mb-4
+            .card.border-0.shadow-sm
+                .card-header.bg-light.text-secondary
+                    h5.m-0 Tour
+                .card-body
+                    p.text-muted Số lượng: <b> #{statistic.tour.total}</b>
+                    p.text-muted Hoạt động: <b> #{statistic.tour.active}</b>
+                    p.text-muted Dừng hoạt động: <b> #{statistic.tour.inactive}</b>
+
+        .col-lg-6.col-md-6.mb-4
+            .card.border-0.shadow-sm
+                .card-header.bg-light.text-secondary
+                    h5.m-0 Tài khoản admin
+                .card-body
+                    p.text-muted Số lượng: <b> #{statistic.account.total}</b>
+                    p.text-muted Hoạt động: <b> #{statistic.account.active}</b>
+                    p.text-muted Dừng hoạt động: <b> #{statistic.account.inactive}</b>
+
+        .col-lg-6.col-md-6.mb-4
+            .card.border-0.shadow-sm
+                .card-header.bg-light.text-secondary
+                    h5.m-0 Tài khoản client
+                .card-body
+                    p.text-muted Số lượng: <b> #{statistic.user.total}</b>
+                    p.text-muted Hoạt động: <b> #{statistic.user.active}</b>
+                    p.text-muted Dừng hoạt động: <b> #{statistic.user.inactive}</b>

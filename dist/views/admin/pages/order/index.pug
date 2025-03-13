@@ -1,0 +1,84 @@
+extends ../../layouts/default.pug
+include ../../mixins/pagination.pug
+
+block main
+  if(role.permissions.includes("order_view"))
+    h1(class="mb-4") #{pageTitle}
+
+    .card.mb-3
+      .card-header Danh sách đơn hàng
+      .card-body
+        .row
+
+        table(
+          class="table table-hover table-sm mt-3"
+        )
+          thead
+            tr
+              th STT
+              th Mã đơn
+              th Họ và tên
+              th Số điện thoại
+              th Chi tiết tour
+              th Tổng đơn hàng
+              th Trạng thái
+              th Hành động
+
+          tbody
+            each item, index in orders
+              tr 
+                td #{index+1}
+                td #{item.order_code}
+                td #{item.customer_name}
+                td #{item.customer_phone}
+                td #{item.tour_details}
+                td #{parseInt(item.total_amount).toLocaleString()}đ
+                td
+                  if(role.permissions.includes("order_edit"))
+                    if (item.status === "initial")
+                      a(
+                        href="javascript:;"
+                        data-status=item.status
+                        data-id = item.id 
+                        button-change-status-order
+                        class="badge badge-warning"
+                      ) Ban đầu
+                    else
+                      span(
+                        class="badge badge-success"
+                      ) Xác nhận
+                  else
+                    if (item.status === "initial")
+                      span(
+                        class="badge badge-warning"
+                      ) Ban đầu
+                    else
+                      span(
+                        class="badge badge-success"
+                      ) Xác nhận
+                td
+                  a(
+                    class="btn btn-secondary btn-sm"
+                    href=`/${prefixAdmin}/orders/detail/${item.id}`
+                  ) Chi tiết
+                  if(role.permissions.includes("order_delete"))
+                    button(
+                      class="btn btn-danger btn-sm ml-1"
+                      button-delete
+                      data-id=item.id
+                    ) Xóa
+    +pagination(pagination)
+
+  form(
+    action=""
+    method="POST"
+    id="form-delete-item"
+    data-path=`/${prefixAdmin}/orders/delete`
+  ) 
+
+  form(
+    action=""
+    method="POST"
+    id="form-change-status-order"
+    data-path=`/${prefixAdmin}/orders/change-status`
+  ) 

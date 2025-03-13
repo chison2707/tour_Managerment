@@ -1,0 +1,77 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+    +alert-success(3000)
+    +alert-error(3000)
+    if(role.permissions.includes("category_create"))
+        h1(class="mb-4") Thêm danh mục tour
+
+        form(
+                action=`/${prefixAdmin}/categories/create` 
+                id="form-create-category" 
+                method="POST"
+                enctype="multipart/form-data"
+            )
+                div(class="form-group")
+                    label(for="title") Tiêu đề
+                    input(
+                        class="form-control" 
+                        type="text" 
+                        id="title"
+                        name="title" 
+                        placeholder="Vui lòng nhập tiêu đề"
+                        required
+                    )
+
+                div(class="form-group")
+                    label(for="desc") Mô tả
+                    textarea(
+                        class="form-control textarea-mce" 
+                        id="desc"
+                        name="description" 
+                        rows="5"
+                    )
+
+                div(
+                    class="form-group"
+                    upload-image
+                    )
+                    label(for="avatar") Ảnh
+                    input(
+                        type="file" 
+                        class="form-control-file" 
+                        id="avatar" 
+                        name="avatar"
+                        accept="image/*"
+                        upload-image-input
+                    )
+                    div(class="image-container")
+                        img(
+                            src=""
+                            upload-image-preview
+                            class="image-preview"
+                        )
+                div(class="form-group form-check form-check-inline")
+                    input(
+                        type="radio"
+                        class="form-check-input"
+                        id="statusActive"
+                        name="status"
+                        value="active"
+                    )
+                    label(for="statusActive" class="form-check-label") Hoạt động
+                div(class="form-group form-check form-check-inline")
+                    input(
+                        type="radio"
+                        class="form-check-input"
+                        id="statusInactive"
+                        name="status"
+                        value="inactive"
+                    )
+                    label(for="statusInactive" class="form-check-label") Dừng hoạt động
+                div(class="form-group")
+                    button(
+                        type="submit"
+                        class="btn btn-primary"
+                    ) Tạo mới

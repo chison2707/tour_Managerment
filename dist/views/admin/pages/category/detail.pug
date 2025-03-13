@@ -1,0 +1,29 @@
+extends ../../layouts/default.pug
+
+block main
+    if(role.permissions.includes("category_view"))
+        h1(class="mb-4") #{category}
+        .container.mt-5
+            .card.shadow-lg
+                .card-header.bg-primary.text-white.text-center
+                    h3 Chi tiết danh mục: #{category.title}
+                .card-body
+                    .row
+                        .col-md-4.text-center
+                            img.img-fluid.rounded(src=category.image alt=category.title style='max-height: 200px;')
+                        .col-md-8
+                            table.table.table-bordered
+                                tbody
+                                    tr
+                                        th(scope='row') Tiêu đề:
+                                        td #{category.title}
+                                    tr
+                                        th(scope='row') Mô tả:
+                                        td !{category.description}
+                                    tr
+                                        th(scope='row') Trạng thái:
+                                        td #{category.status}
+                .card-footer.text-center
+                    a.btn.btn-secondary.mr-2(href='/admin/categories') Quay lại
+                    if(role.permissions.includes("category_edit"))
+                        a.btn.btn-warning(href=`/admin/categories/edit/${category.id}`) Chỉnh sửa
